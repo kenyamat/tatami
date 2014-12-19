@@ -1,7 +1,7 @@
 RSpec.describe Tatami::Parsers::Documents::XmlParser do
 
   let(:contents) { '<root><body><div class="warn">hello world</div></root>' }
-  let(:sut) { Tatami::Parsers::Documents::XmlParser.new(xml) }
+  let(:sut) { Tatami::Parsers::Documents::XmlParser.new(contents) }
 
   describe '#exists_node' do
 

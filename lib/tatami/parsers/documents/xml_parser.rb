@@ -5,7 +5,7 @@ module Tatami
         attr_accessor :contents, :document
         def initialize(contents)
           @contents = contents
-          @document = Nokogiri::XML.parse(@contents, nil, "UTF-8")
+          @document = Nokogiri::XML.parse(@contents, nil, 'UTF-8')
         end
 
         def exists_node(xpath, attribute = nil)
