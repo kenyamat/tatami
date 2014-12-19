@@ -1,12 +1,16 @@
 module Tatami
   module Parsers
     module Documents
-      class HtmlParser < XmlParser
-        attr_accessor :contents, :document
+      class TextParser
+        attr_accessor :contents
         def initialize(contents)
           @contents = contents
-          @document = Nokogiri::HTML.parse(@contents, nil, 'UTF-8')
         end
+
+        def get_document_value(xpath, attribute = nil)
+          @contents
+        end
+
       end
     end
   end
