@@ -1,13 +1,13 @@
-RSpec.describe Tatami::Parsers::Documents::HtmlParser do
+RSpec.describe Tatami::Parsers::Documents::JsonParser do
 
-  let(:contents) { '<html><body><div class="warn">hello world</div></html>' }
-  let(:sut) { Tatami::Parsers::Documents::HtmlParser.new(contents) }
+  let(:contents) { '{ "name" : "test" }' }
+  let(:sut) { Tatami::Parsers::Documents::JsonParser.new(contents) }
 
   describe '#exists_node' do
 
     context 'elements' do
       it 'returns true when a node exists' do
-        result = sut.exists_node('/html/body/div')
+        result = sut.exists_node('/name')
         expect(result).to eq true
       end
 

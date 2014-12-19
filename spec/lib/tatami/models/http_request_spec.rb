@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.describe Tatami::Models::HttpRequest do
 
   let(:sut) { Tatami::Models::HttpRequest.new }
