@@ -7,6 +7,4 @@ RSpec.describe Tatami::Models::HttpRequest do
     end
   end
 
-
-
 end

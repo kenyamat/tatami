@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'json'
 require "active_support"
 require 'active_support/core_ext'
+require 'uri'
 
 require 'tatami/version'
 
@@ -14,6 +15,10 @@ require 'tatami/constants/parser_type'
 require 'tatami/models/arrange'
 require 'tatami/models/http_request'
 require 'tatami/models/http_response'
+require 'tatami/models/assertions/assertion_base'
+require 'tatami/models/assertions/content_assertion_item'
+require 'tatami/models/assertions/cookie_assertion'
+require 'tatami/models/assertions/text_assertion'
 
 # parsers
 require 'tatami/parsers/documents/xml_parser'
