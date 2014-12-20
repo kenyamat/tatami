@@ -4,6 +4,10 @@ module Tatami
       class TextAssertion < AssertionBase
         attr_accessor :is_list, :expected, :actual
 
+        def initialize
+          @is_list = false
+        end
+
         def get_name
           '%s(%s)' % [ Tatami::Constants::HeaderNames::COOKIES, @key ]
         end
@@ -32,11 +36,11 @@ module Tatami
           end
 
           if @expected.url_decode
-            @expected_value = URI.unescape(@expected_value)
+            @expected_value = URI.decode_www_form(@expected_value)
           end
 
           if @actual.url_decode
-            @actual_value = URI.unescape(@actual_value)
+            @actual_value = URI.decode_www_form(@actual_value)
           end
 
           @success = @expected_value == @actual_value

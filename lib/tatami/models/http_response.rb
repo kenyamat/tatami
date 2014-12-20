@@ -3,6 +3,10 @@ module Tatami
     class HttpResponse
       attr_accessor :uri, :status_code, :content_type, :last_modified, :headers, :cookies, :contents, :exception
 
+      def initialize
+        @document_parser = nil
+      end
+
       def get_document_parser
         if @document_parser.nil?
           case get_parser_type
