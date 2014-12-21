@@ -1,82 +1,93 @@
 RSpec.describe Tatami::Models::Assertions::TextAssertion do
-  let(:expected) { Tatami::Models::Arrange.new }
-  let(:actual) { Tatami::Models::Arrange.new }
-  let(:sut) { Tatami::Models::Assertions::TextAssertion.new }
-  let(:sut_expected) { Tatami::Models::Assertions::ContentAssertionItem.new }
-  let(:sut_actual) { Tatami::Models::Assertions::ContentAssertionItem.new }
-
-  before do
-    sut.expected = sut_expected
-    sut.actual = sut_actual
-  end
+  let(:sut) {
+    Tatami::Models::Assertions::TextAssertion.new(
+      is_list: is_list,
+      expected: Tatami::Models::Assertions::ContentAssertionItem.new(expected_params),
+      actual: Tatami::Models::Assertions::ContentAssertionItem.new(actual_params))
+  }
+  let(:expected_params) { {} }
+  let(:actual_params) { {} }
+  let(:is_list) { false }
 
   describe '#match' do
-    it 'succeeds' do
-      expect(sut.match('aaa:bbb', ':(.*)')).to eq 'bbb'
+    subject { sut.match(value, ':(.*)') }
+
+    context 'when valid' do
+      let(:value) { 'aaa:bbb' }
+      it { is_expected.to eq 'bbb' }
     end
 
-    it 'fails' do
-      expect { sut.match('aaa', ':(.*)') } .to raise_error
+    context 'when not valid' do
+      let(:value) { 'aaa' }
+      it { expect { subject }.to raise_error }
     end
   end
 
   describe '#assert' do
     context 'exists' do
-      before { sut_expected.exists = true }
+      let(:expected_params) { { :exists => true } }
 
-      it 'succeeds' do
-        actual.http_response = double('http_response', :exists_node => true)
-        expect(sut.assert(expected, actual)).to eq true
+      subject { sut.assert(Tatami::Models::Arrange.new,
+                           Tatami::Models::Arrange.new(http_response: double(:exists_node => response_exists))) }
+
+      context 'when exist' do
+        let(:response_exists) { true }
+        it { is_expected.to eq true }
       end
 
-      it 'fails' do
-        actual.http_response = double('http_response', :exists_node => false)
-        expect(sut.assert(expected, actual)).to eq false
-      end
-    end
-
-    context 'is not list' do
-      it 'succeeds' do
-        expected.http_response = double('e_http_response', :get_document_value => 'a')
-        actual.http_response = double('a_http_response', :get_document_value => 'a')
-        expect(sut.assert(expected, actual)).to eq true
-      end
-
-      it 'fails' do
-        expected.http_response = double('e_http_response', :get_document_value => 'a')
-        actual.http_response = double('a_http_response', :get_document_value => 'b')
-        expect(sut.assert(expected, actual)).to eq false
-      end
-
-      it 'does url decode' do
-        sut_expected.url_decode = true
-        sut_actual.url_decode = true
-        expected.http_response = double('e_http_response', :get_document_value => 'a%20b')
-        actual.http_response = double('a_http_response', :get_document_value => 'a%20b')
-        expect(sut.assert(expected, actual)).to eq true
-      end
-
-      it 'does regex match' do
-        sut_expected.pattern = ':(.*)'
-        expected.http_response = double('e_http_response', :get_document_value => 'cc:ab')
-        actual.http_response = double('a_http_response', :get_document_value => 'ab')
-        expect(sut.assert(expected, actual)).to eq true
+      context 'when not exist' do
+        let(:response_exists) { false }
+        it { is_expected.to eq false }
       end
     end
 
-    context 'is list' do
-      before { sut.is_list = true }
+    context 'single value' do
+      subject { sut.assert(Tatami::Models::Arrange.new(http_response: double(:get_document_value => expected_value)),
+                           Tatami::Models::Arrange.new(http_response: double(:get_document_value => actual_value))) }
 
-      it 'succeeds' do
-        expected.http_response = double('e_http_response', :get_document_values => %w(a b))
-        actual.http_response = double('a_http_response', :get_document_values => %w(a b))
-        expect(sut.assert(expected, actual)).to eq true
+      context 'when valid' do
+        let(:expected_value) { 'a' }
+        let(:actual_value) { 'a' }
+        it { is_expected.to eq true }
       end
 
-      it 'fails' do
-        expected.http_response = double('e_http_response', :get_document_values => %w(a b))
-        actual.http_response = double('a_http_response', :get_document_values => %w(a c))
-        expect(sut.assert(expected, actual)).to eq false
+      context 'when not valid' do
+        let(:expected_value) { 'a' }
+        let(:actual_value) { 'b' }
+        it { is_expected.to eq false }
+      end
+
+      context 'when url-decode' do
+        let(:actual_params) { { :url_decode => true } }
+        let(:expected_value) { 'a b' }
+        let(:actual_value) { 'a%20b' }
+        it { is_expected.to eq true }
+      end
+
+      context 'when regex' do
+        let(:actual_params) { { :pattern => ':(.*)' } }
+        let(:expected_value) { 'ab' }
+        let(:actual_value) { 'cc:ab' }
+        it { is_expected.to eq true }
+      end
+    end
+
+    context 'list' do
+      let(:is_list) { true }
+
+      subject { sut.assert(Tatami::Models::Arrange.new(http_response: double(:get_document_values => expected_value)),
+                           Tatami::Models::Arrange.new(http_response: double(:get_document_values => actual_value))) }
+
+      context 'when valid' do
+        let(:expected_value) { %w(a b) }
+        let(:actual_value) { %w(a b) }
+        it { is_expected.to eq true }
+      end
+
+      context 'when not valid' do
+        let(:expected_value) { %w(a b) }
+        let(:actual_value) { %w(a c) }
+        it { is_expected.to eq false }
       end
     end
   end

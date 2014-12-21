@@ -1,6 +1,6 @@
 module Tatami
   module Models
-    class Arranges
+    class Arranges < ModelBase
       attr_accessor :expected, :actual
     end
   end

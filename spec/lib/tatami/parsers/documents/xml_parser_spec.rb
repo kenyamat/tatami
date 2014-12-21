@@ -1,64 +1,71 @@
 RSpec.describe Tatami::Parsers::Documents::XmlParser do
-
-  let(:contents) { '<root><body><div class="warn">hello world</div></root>' }
   let(:sut) { Tatami::Parsers::Documents::XmlParser.new(contents) }
+  let(:contents) { '<root><body><div class="warn">hello world</div></root>' }
 
   describe '#exists_node' do
-
+    let(:attr_name) {}
+    subject { sut.exists_node(xpath, attr_name) }
+    
     context 'elements' do
-      it 'returns true when a node exists' do
-        result = sut.exists_node('/root/body/div')
-        expect(result).to eq true
+      context 'when node is found' do
+        let(:xpath) { '/root/body/div' }
+        it { is_expected.to eq true }
       end
 
-      it 'returns false when a node does not exist' do
-        result = sut.exists_node('/root/body/a')
-        expect(result).to eq false
+      context 'when node is not found' do
+        let(:xpath) { '/root/body/a' }
+        it { is_expected.to eq false }
       end
     end
-
+    
     context 'attributes' do
-      it 'returns true when an attribute exists' do
-        result = sut.exists_node('/root/body/div', 'class')
-        expect(result).to eq true
+      context 'when attribute is found' do
+        let(:xpath) { '/root/body/div' }
+        let(:attr_name) { 'class' }
+        it { is_expected.to eq true }
       end
 
-      it 'returns false when an attribute does not exist' do
-        result = sut.exists_node('/root/body/div', 'style')
-        expect(result).to eq false
+      context 'when attribute is not found' do
+        let(:xpath) { '/root/body/div' }
+        let(:attr_name) { 'style' }
+        it { is_expected.to eq false }
       end
     end
-
   end
 
   describe '#get_document_value' do
+    let(:attr_name) {}
+    subject { sut.get_document_value(xpath, attr_name) }
 
     context 'elements' do
-      it 'returns node value' do
-        result = sut.get_document_value('/root/body/div')
-        expect(result).to eq 'hello world'
+      context 'when node is found' do
+        let(:xpath) { '/root/body/div' }
+        it { is_expected.to eq 'hello world' }
       end
 
-      it 'raises a exception when a node does not exist' do
-        expect{ sut.get_document_value('/root/body/a') }.to raise_error
+      context 'when node is not found' do
+        let(:xpath) { '/root/body/a' }
+        it { expect { subject }.to raise_error }
       end
     end
 
     context 'attributes' do
-      it 'returns attribute value' do
-        result = sut.get_document_value('/root/body/div', 'class')
-        expect(result).to eq 'warn'
+      context 'when attribute is found' do
+        let(:xpath) { '/root/body/div' }
+        let(:attr_name) { 'class' }
+        it { is_expected.to eq 'warn' }
       end
 
-      it 'raises a exception when an attribute does not exist' do
-        expect{ sut.get_document_value('/root/body/div', 'style') }.to raise_error
+      context 'when attribute is not found' do
+        let(:xpath) { '/root/body/div' }
+        let(:attr_name) { 'style' }
+        it { expect { subject }.to raise_error }
       end
     end
-
   end
 
   describe '#get_document_values' do
-
+    let(:attr_name) {}
     let(:contents) do
       <<-EOS
       <root><body><ul>
@@ -69,41 +76,36 @@ RSpec.describe Tatami::Parsers::Documents::XmlParser do
       </ul></body></root>
       EOS
     end
+    subject { sut.get_document_values(xpath, attr_name) }
 
     context 'elements' do
-      it 'returns node values' do
-        result = sut.get_document_values('/root/body/ul/li')
-        expect(result.length).to eq 4
-        expect(result[0]).to eq 'OK'
-        expect(result[1]).to eq 'INFO'
-        expect(result[2]).to eq 'WARN'
-        expect(result[3]).to eq 'ERROR'
+      context 'when nodes are found' do
+        let(:xpath) { '/root/body/ul/li' }
+        it { is_expected.to eq %w(OK INFO WARN ERROR) }
       end
 
-      it 'returns an empty array when nodes not found' do
-        result = sut.get_document_values('/root/body/ul/a')
-        expect(result.length).to eq 0
+      context 'when nodes are not found' do
+        let(:xpath) { '/root/body/ul/a' }
+        it { is_expected.to eq [] }
       end
     end
 
     context 'attributes' do
-      it 'returns attribute value' do
-        result = sut.get_document_values('/root/body/ul/li', 'class')
-        expect(result.length).to eq 4
-        expect(result[0]).to eq 'ok'
-        expect(result[1]).to eq 'info'
-        expect(result[2]).to eq 'warn'
-        expect(result[3]).to eq 'error'
+      context 'when attributes are found' do
+        let(:xpath) { '/root/body/ul/li' }
+        let(:attr_name) { 'class' }
+        it { is_expected.to eq %w(ok info warn error) }
       end
 
-      it 'returns an empty array when nodes not found' do
-        expect{ sut.get_document_values('/root/body/ul/li', 'style') }.to raise_error
+      context 'when attributes are not found' do
+        let(:xpath) { '/root/body/ul/li' }
+        let(:attr_name) { 'style' }
+        it { expect { subject }.to raise_error }
       end
     end
   end
 
   describe '#test_schema_with_xsd' do
-
     let(:xsd) do
       <<-EOS
       <?xml version="1.0" encoding="utf-8"?>
@@ -118,24 +120,16 @@ RSpec.describe Tatami::Parsers::Documents::XmlParser do
       </xs:schema>
       EOS
     end
+    subject { sut.test_schema_with_xsd(xsd) }
 
-    context 'valid xml document' do
-
+    context 'when valid' do
       let(:contents) { '<shop><item/></shop>' }
-
-      it 'returns true' do
-        expect(sut.test_schema_with_xsd(xsd)).to eq true
-      end
+      it { is_expected.to eq true }
     end
 
-    context 'invalid xml document' do
-
+    context 'when not valid' do
       let(:contents) { '<shop><price/></shop>' }
-
-      it 'returns true' do
-        expect(sut.test_schema_with_xsd(xsd)).to eq false
-      end
+      it { is_expected.to eq false }
     end
-
   end
 end

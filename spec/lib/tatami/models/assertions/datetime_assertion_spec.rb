@@ -1,84 +1,89 @@
 RSpec.describe Tatami::Models::Assertions::DateTimeAssertion do
-  let(:expected) { Tatami::Models::Arrange.new }
-  let(:actual) { Tatami::Models::Arrange.new }
-  let(:sut) { Tatami::Models::Assertions::DateTimeAssertion.new }
-  let(:sut_expected) { Tatami::Models::Assertions::ContentAssertionItem.new }
-  let(:sut_actual) { Tatami::Models::Assertions::ContentAssertionItem.new }
-
-  before do
-    sut_expected.format = '%Y-%m-%d'
-    sut_actual.format = '%Y-%m-%d'
-    sut.expected = sut_expected
-    sut.actual = sut_actual
-  end
+  let(:sut) {
+    Tatami::Models::Assertions::DateTimeAssertion.new(is_list: is_list, is_time: is_time,
+      expected: Tatami::Models::Assertions::ContentAssertionItem.new(format: date_format),
+      actual: Tatami::Models::Assertions::ContentAssertionItem.new(format: date_format))
+  }
+  let(:date_format) { '%Y-%m-%d' }
+  let(:is_list) { false }
+  let(:is_time) { false }
 
   describe '#assert' do
-    context 'date' do
-      context 'single date' do
-        it 'succeeds' do
-          expected.http_response = double('e_http_response', :get_document_value => '2014-12-20')
-          actual.http_response = double('a_http_response', :get_document_value => '2014-12-20')
-          expect(sut.assert(expected, actual)).to eq true
+    subject { sut.assert(Tatami::Models::Arrange.new(http_response: expected_response), Tatami::Models::Arrange.new(http_response: actual_response)) }
+
+    context 'single value' do
+      let(:expected_response) { double(:get_document_value => expected_value) }
+      let(:actual_response) { double(:get_document_value => actual_value) }
+
+      context 'date' do
+        context 'when valid' do
+          let(:expected_value) { '2014-12-20' }
+          let(:actual_value) { '2014-12-20' }
+          it { is_expected.to eq true }
         end
 
-        it 'fails' do
-          expected.http_response = double('e_http_response', :get_document_value => '2014-12-20')
-          actual.http_response = double('a_http_response', :get_document_value => '2014-12-21')
-          expect(sut.assert(expected, actual)).to eq false
+        context 'when not valid' do
+          let(:expected_value) { '2014-12-20' }
+          let(:actual_value) { '2014-12-21' }
+          it { is_expected.to eq false }
         end
       end
 
-      context 'is list' do
-        before { sut.is_list = true }
+      context 'time' do
+        let(:is_time) { true }
+        let(:date_format) { '%H:%M:%S' }
 
-        it 'succeeds' do
-          expected.http_response = double('e_http_response', :get_document_values => %w(2014-12-20 2014-12-21))
-          actual.http_response = double('a_http_response', :get_document_values => %w(2014-12-20 2014-12-21))
-          expect(sut.assert(expected, actual)).to eq true
+        context 'when valid' do
+          let(:expected_value) { '23:50:10' }
+          let(:actual_value) { '23:50:10' }
+          it { is_expected.to eq true }
         end
 
-        it 'fails' do
-          expected.http_response = double('e_http_response', :get_document_values => %w(2014-12-20 2014-12-21))
-          actual.http_response = double('a_http_response', :get_document_values => %w(2014-12-21 2014-12-22))
-          expect(sut.assert(expected, actual)).to eq false
+        context 'when not valid' do
+          let(:expected_value) { '23:50:10' }
+          let(:actual_value) { '23:50:11' }
+          it { is_expected.to eq false }
         end
       end
     end
 
-    context 'time' do
-      before do
-        sut.is_time = true
-        sut_expected.format = '%H:%M:%S'
-        sut_actual.format = '%H:%M:%S'
+    context 'list' do
+      let(:is_list) { true }
+      let(:expected_response) { double(:get_document_values => expected_value) }
+      let(:actual_response) { double(:get_document_values => actual_value) }
+
+      context 'date' do
+        let(:expected_response) { double(:get_document_values => expected_value) }
+        let(:actual_response) { double(:get_document_values => actual_value) }
+        let(:is_list) { true }
+
+        context 'when valid' do
+          let(:expected_value) { %w(2014-12-20 2014-12-21) }
+          let(:actual_value) { %w(2014-12-20 2014-12-21) }
+          it { is_expected.to eq true }
+        end
+
+        context 'when not valid' do
+          let(:expected_value) { %w(2014-12-20 2014-12-21) }
+          let(:actual_value) { %w(2014-12-21 2014-12-22) }
+          it { is_expected.to eq false }
+        end
       end
 
-      context 'single time' do
-        it 'succeeds' do
-          expected.http_response = double('e_http_response', :get_document_value => '23:50:10')
-          actual.http_response = double('a_http_response', :get_document_value => '23:50:10')
-          expect(sut.assert(expected, actual)).to eq true
+      context 'time' do
+        let(:is_time) { true }
+        let(:date_format) { '%H:%M:%S' }
+
+        context 'when valid' do
+          let(:expected_value) { %w(23:50:10 23:50:11) }
+          let(:actual_value) { %w(23:50:10 23:50:11) }
+          it { is_expected.to eq true }
         end
 
-        it 'fails' do
-          expected.http_response = double('e_http_response', :get_document_value => '23:50:10')
-          actual.http_response = double('a_http_response', :get_document_value => '23:50:11')
-          expect(sut.assert(expected, actual)).to eq false
-        end
-      end
-
-      context 'is list' do
-        before { sut.is_list = true }
-
-        it 'succeeds' do
-          expected.http_response = double('e_http_response', :get_document_values => %w(23:50:10 23:50:11))
-          actual.http_response = double('a_http_response', :get_document_values => %w(23:50:10 23:50:11))
-          expect(sut.assert(expected, actual)).to eq true
-        end
-
-        it 'fails' do
-          expected.http_response = double('e_http_response', :get_document_values => %w(23:50:10 23:50:11))
-          actual.http_response = double('a_http_response', :get_document_values => %w(23:50:11 23:50:12))
-          expect(sut.assert(expected, actual)).to eq false
+        context 'when not valid' do
+          let(:expected_value) { %w(23:50:10 23:50:11) }
+          let(:actual_value) { %w(23:50:11 23:50:12) }
+          it { is_expected.to eq false }
         end
       end
     end

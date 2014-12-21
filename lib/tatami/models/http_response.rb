@@ -1,10 +1,11 @@
 module Tatami
   module Models
-    class HttpResponse
+    class HttpResponse < ModelBase
       attr_accessor :uri, :status_code, :content_type, :last_modified, :headers, :cookies, :contents, :exception
 
-      def initialize
-        @document_parser = nil
+      def initialize(params = nil)
+        super
+        @document_parser ||= nil
       end
 
       def get_document_parser

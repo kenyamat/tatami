@@ -1,81 +1,77 @@
 RSpec.describe Tatami::Models::HttpResponse do
-
-  let(:sut) { Tatami::Models::HttpResponse.new }
+  let(:sut) { Tatami::Models::HttpResponse.new(content_type: content_type, contents: contents) }
 
   describe '#get_document_parser' do
+    subject { sut.get_document_parser }
 
-    it 'returns a XmlParser' do
-      sut.content_type = 'text/xml'
-      sut.contents = '<root><body>a</body></root>'
-      expect(sut.get_document_parser).to be_a_kind_of Tatami::Parsers::Documents::XmlParser
+    context 'XmlParser' do
+      let(:content_type) { 'text/xml' }
+      let(:contents) { '<root><body>a</body></root>' }
+      it { is_expected.to be_a_kind_of Tatami::Parsers::Documents::XmlParser }
     end
 
-    it 'returns a HtmlParser' do
-      sut.content_type = 'text/html'
-      sut.contents = '<html><body>a</body></html>'
-      expect(sut.get_document_parser).to be_a_kind_of Tatami::Parsers::Documents::HtmlParser
+    context 'HtmlParser' do
+      let(:content_type) { 'text/html' }
+      let(:contents) { '<html><body>a</body></html>' }
+      it { is_expected.to be_a_kind_of Tatami::Parsers::Documents::HtmlParser }
     end
 
-    it 'returns a JsonParser' do
-      sut.content_type = 'text/javascript'
-      sut.contents = '{ "name" : "Tom" }'
-      expect(sut.get_document_parser).to be_a_kind_of Tatami::Parsers::Documents::JsonParser
+    context 'JsonParser' do
+      let(:content_type) { 'text/javascript' }
+      let(:contents) { '{ "name" : "Tom" }' }
+      it { is_expected.to be_a_kind_of Tatami::Parsers::Documents::JsonParser }
     end
 
-    it 'returns a TextParser' do
-      sut.content_type = 'text/plain'
-      sut.contents = 'aaa'
-      expect(sut.get_document_parser).to be_a_kind_of Tatami::Parsers::Documents::TextParser
-    end
-
-  end
-
-  describe "#exists_node" do
-
-    it 'returns true' do
-      sut.content_type = 'text/xml'
-      sut.contents = '<root><body>a</body></root>'
-      expect(sut.exists_node('/root/body')).to eq true
-    end
-
-    it 'raises a error' do
-      sut.content_type = 'text/xml'
-      sut.contents = '<root><body>a</body></root>'
-      expect{ sut.exists_node('\\') }.to raise_error
+    context 'TextParser' do
+      let(:content_type) { 'text/plain' }
+      let(:contents) { 'aaa' }
+      it { is_expected.to be_a_kind_of Tatami::Parsers::Documents::TextParser }
     end
 
   end
 
-  describe "#get_document_value" do
+  context 'test tree' do
+    let(:content_type) { 'text/xml' }
+    let(:contents) { '<root><body>a</body></root>' }
+    let(:xpath) { '/root/body' }
 
-    it 'returns node value' do
-      sut.content_type = 'text/xml'
-      sut.contents = '<root><body>a</body></root>'
-      expect(sut.get_document_value('/root/body')).to eq 'a'
+    describe '#exists_node' do
+      subject { sut.exists_node(xpath) }
+
+      context 'when exist' do
+        it { is_expected.to eq true }
+      end
+
+      context 'when invalid xpath' do
+        let(:xpath) { '\\' }
+        it { expect { subject }.to raise_error }
+      end
     end
 
-    it 'raises a error' do
-      sut.content_type = 'text/xml'
-      sut.contents = '<root><body>a</body></root>'
-      expect{ sut.get_document_value('\\') }.to raise_error
+    describe '#get_document_value' do
+      subject { sut.get_document_value(xpath) }
+
+      context 'when valid' do
+        it { is_expected.to eq 'a' }
+      end
+
+      context 'when invalid xpath' do
+        let(:xpath) { '\\' }
+        it { expect { subject }.to raise_error }
+      end
     end
 
+    describe '#get_document_values' do
+      subject { sut.get_document_values(xpath) }
+
+      context 'when valid' do
+        it { is_expected.to eq ['a'] }
+      end
+
+      context 'when invalid xpath' do
+        let(:xpath) { '\\' }
+        it { expect { subject }.to raise_error }
+      end
+    end
   end
-
-  describe "#get_document_values" do
-
-    it 'returns node value' do
-      sut.content_type = 'text/xml'
-      sut.contents = '<root><body>a</body></root>'
-      expect(sut.get_document_values('/root/body')).to eq ['a']
-    end
-
-    it 'raises a error' do
-      sut.content_type = 'text/xml'
-      sut.contents = '<root><body>a</body></root>'
-      expect{ sut.get_document_values('\\') }.to raise_error
-    end
-
-  end
-
 end

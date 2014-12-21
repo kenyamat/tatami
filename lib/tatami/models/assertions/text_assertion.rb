@@ -4,8 +4,9 @@ module Tatami
       class TextAssertion < AssertionBase
         attr_accessor :is_list, :expected, :actual
 
-        def initialize
-          @is_list = false
+        def initialize(params = nil)
+          super
+          @is_list ||= false
         end
 
         def get_name
@@ -36,11 +37,11 @@ module Tatami
           end
 
           if @expected.url_decode
-            @expected_value = URI.decode_www_form(@expected_value)
+            @expected_value = URI.decode_www_form_component(@expected_value)
           end
 
           if @actual.url_decode
-            @actual_value = URI.decode_www_form(@actual_value)
+            @actual_value = URI.decode_www_form_component(@actual_value)
           end
 
           @success = @expected_value == @actual_value

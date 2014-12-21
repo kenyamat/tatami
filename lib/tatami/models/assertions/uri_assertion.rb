@@ -10,7 +10,8 @@ module Tatami
 
         def assert(expected, actual)
           @expected_value = @value
-          if md = actual.http_response.uri.match('.*://[^/]*(.*)')
+          md = actual.http_response.uri.match('.*://[^/]*(.*)')
+          if md
             @actual_value = md[1]
             if @actual_value.nil? or @actual_value == ''
               @actual_value = '/'

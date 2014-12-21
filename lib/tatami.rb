@@ -12,6 +12,7 @@ require 'tatami/constants/header_names'
 require 'tatami/constants/parser_type'
 
 # models
+require 'tatami/models/model_base'
 require 'tatami/models/arrange'
 require 'tatami/models/http_request'
 require 'tatami/models/http_response'

@@ -1,52 +1,52 @@
 RSpec.describe Tatami::Models::Assertions::UriAssertion do
-  let(:expected) { Tatami::Models::Arrange.new }
-  let(:actual) { Tatami::Models::Arrange.new }
-  let(:sut) { Tatami::Models::Assertions::UriAssertion.new }
-
   describe '#get_name' do
-    it 'gets name' do
-      expect(sut.get_name).to eq 'Uri'
-    end
+    let(:sut) { Tatami::Models::Assertions::UriAssertion.new }
+    subject { sut.get_name }
+    it { is_expected.to eq 'Uri' }
   end
 
   describe '#assert' do
-    context 'success cases' do
-      it 'successes' do
-        actual.http_response = double('http_response', :uri => 'http://a.com/test/test1')
-        sut.value = '/test/test1'
-        expect(sut.assert(expected, actual)).to eq true
+    let(:sut) { Tatami::Models::Assertions::UriAssertion.new(value: expected_uri) }
+    let(:http_response) { double('http_response', :uri => response_uri) }
+    subject { sut.assert(nil, Tatami::Models::Arrange.new(http_response: http_response)) }
+
+    context 'when valid' do
+      context 'path infos' do
+        let(:expected_uri) { '/test/test1' }
+        let(:response_uri) { 'http://a.com/test/test1' }
+        it { is_expected.to eq true }
       end
 
-      it 'successes' do
-        actual.http_response = double('http_response', :uri => 'http://a.com/test?a=b')
-        sut.value = '/test?a=b'
-        expect(sut.assert(expected, actual)).to eq true
+      context 'query strings' do
+        let(:expected_uri) { '/test?a=b' }
+        let(:response_uri) { 'http://a.com/test?a=b' }
+        it { is_expected.to eq true }
       end
 
-      it 'successes' do
-        actual.http_response = double('http_response', :uri => 'http://a.com/')
-        sut.value = '/'
-        expect(sut.assert(expected, actual)).to eq true
+      context 'fragment' do
+        let(:expected_uri) { '/test#aaa' }
+        let(:response_uri) { 'http://a.com/test#aaa' }
+        it { is_expected.to eq true }
       end
 
-      it 'successes' do
-        actual.http_response = double('http_response', :uri => 'http://a.com')
-        sut.value = '/'
-        expect(sut.assert(expected, actual)).to eq true
+      context 'root with slash' do
+        let(:expected_uri) { '/' }
+        let(:response_uri) { 'http://a.com/' }
+        it { is_expected.to eq true }
+      end
+
+      context 'root with no slash' do
+        let(:expected_uri) { '/' }
+        let(:response_uri) { 'http://a.com' }
+        it { is_expected.to eq true }
       end
     end
 
-    context 'fail cases' do
-      it 'fails' do
-        actual.http_response = double('http_response', :uri => 'http://a.com/test')
-        sut.value = '/xxx'
-        expect(sut.assert(expected, actual)).to eq false
-      end
-
-      it 'fails' do
-        actual.http_response = double('http_response', :uri => 'http://a.com/?a=b')
-        sut.value = '/'
-        expect(sut.assert(expected, actual)).to eq false
+    context 'when not valid' do
+      context 'when not match' do
+        let(:expected_uri) { '/test' }
+        let(:response_uri) { 'http://a.com/xxx' }
+        it { is_expected.to eq false }
       end
     end
   end
