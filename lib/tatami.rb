@@ -20,6 +20,9 @@ require 'tatami/models/assertions/content_assertion_item'
 require 'tatami/models/assertions/cookie_assertion'
 require 'tatami/models/assertions/text_assertion'
 require 'tatami/models/assertions/datetime_assertion'
+require 'tatami/models/assertions/header_assertion'
+require 'tatami/models/assertions/uri_assertion'
+require 'tatami/models/assertions/status_code_assertion'
 
 # parsers
 require 'tatami/parsers/documents/xml_parser'
