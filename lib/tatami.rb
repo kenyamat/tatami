@@ -4,6 +4,7 @@ require 'json'
 require "active_support"
 require 'active_support/core_ext'
 require 'uri'
+require 'httpclient'
 
 require 'tatami/version'
 
@@ -27,6 +28,9 @@ require 'tatami/models/assertions/uri_assertion'
 require 'tatami/models/assertions/status_code_assertion'
 require 'tatami/models/test_case'
 require 'tatami/models/test_cases'
+
+# services
+require 'tatami/services/http_request_service'
 
 # parsers
 require 'tatami/parsers/documents/xml_parser'
