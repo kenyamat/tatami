@@ -28,7 +28,7 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
       let(:expected_params) { { :exists => true } }
 
       subject { sut.assert(Tatami::Models::Arrange.new,
-                           Tatami::Models::Arrange.new(http_response: double(:exists_node => response_exists))) }
+                           Tatami::Models::Arrange.new(http_response: double(:exists_node? => response_exists))) }
 
       context 'when exist' do
         let(:response_exists) { true }

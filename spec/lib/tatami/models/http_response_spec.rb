@@ -35,8 +35,8 @@ RSpec.describe Tatami::Models::HttpResponse do
     let(:contents) { '<root><body>a</body></root>' }
     let(:xpath) { '/root/body' }
 
-    describe '#exists_node' do
-      subject { sut.exists_node(xpath) }
+    describe '#exists_node?' do
+      subject { sut.exists_node?(xpath) }
 
       context 'when exist' do
         it { is_expected.to eq true }

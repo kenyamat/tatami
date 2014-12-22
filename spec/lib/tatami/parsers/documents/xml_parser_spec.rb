@@ -2,9 +2,9 @@ RSpec.describe Tatami::Parsers::Documents::XmlParser do
   let(:sut) { Tatami::Parsers::Documents::XmlParser.new(contents) }
   let(:contents) { '<root><body><div class="warn">hello world</div></root>' }
 
-  describe '#exists_node' do
+  describe '#exists_node?' do
     let(:attr_name) {}
-    subject { sut.exists_node(xpath, attr_name) }
+    subject { sut.exists_node?(xpath, attr_name) }
     
     context 'elements' do
       context 'when node is found' do

@@ -25,9 +25,9 @@ module Tatami
         @document_parser
       end
 
-      def exists_node(xpath, attribute = nil)
+      def exists_node?(xpath, attribute = nil)
         begin
-          get_document_parser.exists_node(xpath, attribute)
+          get_document_parser.exists_node?(xpath, attribute)
         rescue => ex
           ex.message << ' : Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s' % [get_parser_type, xpath, attribute]
           raise ex

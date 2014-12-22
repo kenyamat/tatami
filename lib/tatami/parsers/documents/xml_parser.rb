@@ -8,7 +8,7 @@ module Tatami
           @document = Nokogiri::XML.parse(@contents, nil, 'UTF-8')
         end
 
-        def exists_node(xpath, attribute = nil)
+        def exists_node?(xpath, attribute = nil)
           html_node = @document.at_xpath(xpath)
           if html_node.nil?
             return false
@@ -20,7 +20,6 @@ module Tatami
               return false
             end
           end
-
           true
         end
 
@@ -32,7 +31,6 @@ module Tatami
           else
             html_node.attribute(attribute).value
           end
-
         end
 
         def get_document_values(xpath, attribute = nil)
@@ -43,7 +41,6 @@ module Tatami
             value = (attribute.nil? or attribute.empty?) ? html_node.text : html_node.attribute(attribute).value
             list.push(value)
           end
-
           list
         end
 

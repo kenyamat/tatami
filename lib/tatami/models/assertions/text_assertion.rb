@@ -25,7 +25,7 @@ module Tatami
         def assert(expected, actual)
           if @expected.exists
             @expected_value = 'Node exists: %s' % @expected.exists
-            @actual_value = 'Node exists: %s' % actual.http_response.exists_node(@actual.query, @actual.attribute)
+            @actual_value = 'Node exists: %s' % actual.http_response.exists_node?(@actual.query, @actual.attribute)
           else
             if @is_list
               @expected_value = get_values(expected, @expected).join(', ')

@@ -14,6 +14,7 @@ require 'tatami/constants/parser_type'
 # models
 require 'tatami/models/model_base'
 require 'tatami/models/arrange'
+require 'tatami/models/arranges'
 require 'tatami/models/http_request'
 require 'tatami/models/http_response'
 require 'tatami/models/assertions/assertion_base'
@@ -24,6 +25,8 @@ require 'tatami/models/assertions/datetime_assertion'
 require 'tatami/models/assertions/header_assertion'
 require 'tatami/models/assertions/uri_assertion'
 require 'tatami/models/assertions/status_code_assertion'
+require 'tatami/models/test_case'
+require 'tatami/models/test_cases'
 
 # parsers
 require 'tatami/parsers/documents/xml_parser'

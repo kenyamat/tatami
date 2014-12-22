@@ -2,8 +2,8 @@ RSpec.describe Tatami::Parsers::Documents::JsonParser do
   let(:sut) { Tatami::Parsers::Documents::JsonParser.new(contents) }
   let(:contents) { '{ "html" : { "body" : { "div" : { "text" : "hello world", "class" : "warn" } } } }' }
 
-  describe '#exists_node' do
-    subject { sut.exists_node(xpath) }
+  describe '#exists_node?' do
+    subject { sut.exists_node?(xpath) }
 
     context 'when node is found' do
       let(:xpath) { '/Root/html/body/div' }
