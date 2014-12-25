@@ -28,6 +28,7 @@ require 'tatami/models/assertions/uri_assertion'
 require 'tatami/models/assertions/status_code_assertion'
 require 'tatami/models/test_case'
 require 'tatami/models/test_cases'
+require 'tatami/models/csv/header'
 
 # services
 require 'tatami/services/http_request_service'
