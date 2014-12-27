@@ -54,3 +54,6 @@ require 'tatami/parsers/csv/arranges_parser'
 require 'tatami/parsers/csv/header_parser'
 require 'tatami/parsers/csv/test_case_parser'
 require 'tatami/parsers/csv/test_cases_parser'
+
+# validator
+require 'tatami/validators/csv/header_validator'
