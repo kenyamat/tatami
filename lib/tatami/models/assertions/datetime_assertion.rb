@@ -12,7 +12,6 @@ module Tatami
             @expected_value = get_value(expected, @expected)
             @actual_value = get_value(actual, @actual)
           end
-
           @success = @expected_value == @actual_value
         end
 
@@ -27,20 +26,16 @@ module Tatami
           values.each { |value|
             list.push(get_datetime_string(value, assertion_item.format))
           }
-
           list
         end
 
         def get_datetime_string(value, format)
           begin
-            if is_time
-              return Time.strptime(value, format).strftime('%H%M%S')
-            end
-
-            Date.strptime(value, format).strftime('%Y%m%d%H%M%S')
+            return Date.strptime(value, format).strftime('%Y%m%d%H%M%S') unless is_time
+            Time.strptime(value, format).strftime('%H%M%S')
           rescue => ex
-            ex.message << ' Failed to parse DateTime. value=%s, format=%s, IsTime=%s' % [ value, format, @is_time ]
-            raise ex
+            raise ArgumentError, ' Failed to parse DateTime. value=%s, format=%s, IsTime=%s, exception=%s, message=%s' %
+                [ value, format, @is_time, ex.class, ex.message ]
           end
         end
       end

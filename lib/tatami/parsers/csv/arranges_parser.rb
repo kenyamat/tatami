@@ -4,8 +4,7 @@ module Tatami
       class ArrangesParser
         def self.parse(header, data)
           raise ArgumentError, 'header must not be null.' if header.nil?
-          raise ArgumentError, 'header.Children must not be null.' if header.children.nil?
-          raise ArgumentError, 'header.Children must no be empty.' if header.children.empty?
+          raise ArgumentError, 'header.Children must not be empty.' if header.children.empty?
           raise ArgumentError, 'data must not be null.' if data.nil?
 
           arranges = Tatami::Models::Arranges.new

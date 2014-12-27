@@ -24,7 +24,9 @@ RSpec.describe Tatami::Models::Assertions::XsdAssertion do
     context 'when error is thrown from test_schema_with_xsd' do
       it {
         allow(parser).to receive(:test_schema_with_xsd).and_raise(ArgumentError)
-        is_expected { subject }.to eq false
+        sut.assert(nil, Tatami::Models::Arrange.new(http_response: http_response))
+        expect(sut.success).to eq false
+        expect(sut.actual_value).to match(/Exception=/)
       }
     end
   end

@@ -3,9 +3,9 @@ module Tatami
     module Csv
       class HttpRequestParser
         def self.parse(header, row, name)
-          raise ArgumentError, 'header must not be null.' if header.nil?
-          raise ArgumentError, 'row must not be null.' if row.nil?
-          raise ArgumentError, 'name must no be empty.' if name.nil?
+          raise ArgumentError, 'header must not be null.' if header.to_s.strip == ''
+          raise ArgumentError, 'row must not be null.' if row.to_s.strip == ''
+          raise ArgumentError, 'name must no be null.' if name.to_s.strip == ''
 
           is_empty = true
           (header.from..header.to).each { |i|

@@ -14,10 +14,7 @@ module Tatami
 
       def get_failed_assertions
         list = []
-        if success?
-          return list
-        end
-
+        return list if success?
         @assertions.each { |assertion|
           unless assertion.success?
             list.push(assertion)

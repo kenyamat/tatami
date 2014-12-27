@@ -26,7 +26,7 @@ RSpec.describe Tatami::Parsers::Documents::JsonParser do
 
     context 'when node is not found' do
       let(:xpath) { '/Root/html/body/div/a' }
-      it { expect { subject }.to raise_error }
+      it { expect { subject }.to raise_error(ArgumentError, /node not found./) }
     end
   end
 end

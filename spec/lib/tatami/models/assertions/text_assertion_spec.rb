@@ -1,8 +1,9 @@
 RSpec.describe Tatami::Models::Assertions::TextAssertion do
+  let(:expected) { Tatami::Models::Assertions::ContentAssertionItem.new(expected_params) }
   let(:sut) {
     Tatami::Models::Assertions::TextAssertion.new(
       is_list: is_list,
-      expected: Tatami::Models::Assertions::ContentAssertionItem.new(expected_params),
+      expected: expected,
       actual: Tatami::Models::Assertions::ContentAssertionItem.new(actual_params))
   }
   let(:expected_params) { {} }
@@ -19,7 +20,7 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
 
     context 'when not valid' do
       let(:value) { 'aaa' }
-      it { expect { subject }.to raise_error }
+      it { expect { subject }.to raise_error(ArgumentError, /Regex failed to match:/) }
     end
   end
 
@@ -74,7 +75,7 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
 
     context 'list' do
       let(:is_list) { true }
-
+      let(:static_value) { nil }
       subject { sut.assert(Tatami::Models::Arrange.new(http_response: double(:get_document_values => expected_value)),
                            Tatami::Models::Arrange.new(http_response: double(:get_document_values => actual_value))) }
 
@@ -88,6 +89,15 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
         let(:expected_value) { %w(a b) }
         let(:actual_value) { %w(a c) }
         it { is_expected.to eq false }
+      end
+
+      context 'when static value' do
+        let(:expected_value) { %w(a b) }
+        let(:actual_value) { %w(a b) }
+        it {
+          allow(expected).to receive(:value) { 'vvvv' }
+          expect { subject }.to raise_error(ArgumentError, /Static value test/)
+        }
       end
     end
   end

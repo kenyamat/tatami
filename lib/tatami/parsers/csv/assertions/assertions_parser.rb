@@ -33,18 +33,13 @@ module Tatami
                       assertions = Tatami::Parsers::Csv::Assertions::TextAssertionParser.parse(header, row)
                     end
                   else
-                    raise ArgumentError 'Invalid Assertion name. name=%s' % [assertion_header_item.name]
+                    raise ArgumentError, 'Invalid Assertion name. name=%s' % [assertion_header_item.name]
                 end
                 list.concat(assertions)
                 j = header.to
               end
             end
             list
-          end
-
-          def self.validate(header, row)
-            name = Tatami::Models::Csv::Header.get_string(header, Tatami::Constants::HeaderNames::NAME, row)
-            raise ArgumentError 'Invalid Data Format. Value of <Name> has no value.' if name.nil? or name == ''
           end
         end
       end

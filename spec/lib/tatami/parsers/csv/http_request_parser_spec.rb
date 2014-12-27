@@ -87,7 +87,7 @@ RSpec.describe Tatami::Parsers::Csv::HttpRequestParser do
     context 'when null header is passed' do
       let(:row) { [ nil, 'TargetSite' ] }
       subject { Tatami::Parsers::Csv::HttpRequestParser.parse(nil, row, 'Actual') }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /header must not be null/) }
     end
 
     context 'when null row is passed' do
@@ -97,7 +97,7 @@ RSpec.describe Tatami::Parsers::Csv::HttpRequestParser do
         ])
       }
       subject { Tatami::Parsers::Csv::HttpRequestParser.parse(header, nil, 'Actual') }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /row must not be null/) }
     end
 
     context 'when null name is passed' do
@@ -108,7 +108,7 @@ RSpec.describe Tatami::Parsers::Csv::HttpRequestParser do
       }
       let(:row) { [ nil, 'TargetSite' ] }
       subject { Tatami::Parsers::Csv::HttpRequestParser.parse(header, row, nil) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /name must no be null/) }
     end
 
     context 'when there is no BaseUri' do
@@ -121,7 +121,7 @@ RSpec.describe Tatami::Parsers::Csv::HttpRequestParser do
       }
       let(:row) { [ nil, 'Mozilla/5.0' ] }
       subject { Tatami::Parsers::Csv::HttpRequestParser.parse(header, row, 'Actual') }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /<BaseUri> should be not null/) }
     end
   end
 end

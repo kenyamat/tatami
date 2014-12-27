@@ -19,14 +19,14 @@ RSpec.describe Tatami::Parsers::Csv::TestCasesParser do
       let(:data) { [[]] }
       let(:resources) { {} }
       subject { Tatami::Parsers::Csv::TestCasesParser.parse(data, resources) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /data should not be null/) }
     end
 
     context 'when data is nil' do
       let(:data) { nil }
       let(:resources) { {} }
       subject { Tatami::Parsers::Csv::TestCasesParser.parse(data, resources) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /data should not be null/) }
     end
   end
 

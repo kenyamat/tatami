@@ -46,6 +46,13 @@ RSpec.describe Tatami::Models::HttpResponse do
         let(:xpath) { '\\' }
         it { expect { subject }.to raise_error }
       end
+
+      context 'when exception is thrown' do
+        it {
+          allow(sut).to receive(:get_document_parser).and_raise(ArgumentError)
+          expect { subject }.to raise_error(ArgumentError, /Failed to get value from document/)
+        }
+      end
     end
 
     describe '#get_document_value' do
@@ -59,6 +66,13 @@ RSpec.describe Tatami::Models::HttpResponse do
         let(:xpath) { '\\' }
         it { expect { subject }.to raise_error }
       end
+
+      context 'when exception is thrown' do
+        it {
+          allow(sut).to receive(:get_document_parser).and_raise(ArgumentError)
+          expect { subject }.to raise_error(ArgumentError, /Failed to get value from document/)
+        }
+      end
     end
 
     describe '#get_document_values' do
@@ -71,6 +85,13 @@ RSpec.describe Tatami::Models::HttpResponse do
       context 'when invalid xpath' do
         let(:xpath) { '\\' }
         it { expect { subject }.to raise_error }
+      end
+
+      context 'when exception is thrown' do
+        it {
+          allow(sut).to receive(:get_document_parser).and_raise(ArgumentError)
+          expect { subject }.to raise_error(ArgumentError, /Failed to get value from document/)
+        }
       end
     end
   end

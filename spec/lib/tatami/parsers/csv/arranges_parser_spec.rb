@@ -19,25 +19,16 @@ RSpec.describe Tatami::Parsers::Csv::ArrangesParser do
       let(:header) { nil }
       let(:row) { [ nil, 'ExpectedSite', 'TargetSite' ] }
       subject { Tatami::Parsers::Csv::ArrangesParser.parse(header, row) }
-      it { expect { subject }.to raise_error(ArgumentError) }
-    end
-
-    context 'when children is null' do
-      let(:header) {
-        Tatami::Models::Csv::Header.new(:name => 'Arrange', :depth => 0, :from => 0, :to => 2, :children => nil)
-      }
-      let(:row) { nil }
-      subject { Tatami::Parsers::Csv::ArrangesParser.parse(header, row) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /header must not be null/) }
     end
 
     context 'when children is empty' do
       let(:header) {
         Tatami::Models::Csv::Header.new(:name => 'Arrange', :depth => 0, :from => 0, :to => 2, :children => [])
       }
-      let(:row) { nil }
+      let(:row) { [] }
       subject { Tatami::Parsers::Csv::ArrangesParser.parse(header, row) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /header.Children must not be empty/) }
     end
 
     context 'when row is null' do
@@ -51,7 +42,7 @@ RSpec.describe Tatami::Parsers::Csv::ArrangesParser do
       }
       let(:row) { nil }
       subject { Tatami::Parsers::Csv::ArrangesParser.parse(header, row) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /data must not be null/) }
     end
 
     context 'when invalid header name' do
@@ -65,7 +56,7 @@ RSpec.describe Tatami::Parsers::Csv::ArrangesParser do
       }
       let(:row) { [ nil, 'ExpectedSite', 'TargetSite' ] }
       subject { Tatami::Parsers::Csv::ArrangesParser.parse(header, row) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /Invalid HttpRequest name/) }
     end
 
     context 'when there is no actual' do
@@ -77,7 +68,7 @@ RSpec.describe Tatami::Parsers::Csv::ArrangesParser do
       }
       let(:row) { [ nil, 'ExpectedSite' ] }
       subject { Tatami::Parsers::Csv::ArrangesParser.parse(header, row) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /HttpRequest Actual is empty/) }
     end
   end
 end

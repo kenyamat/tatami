@@ -56,6 +56,16 @@ RSpec.describe Tatami::Models::TestCase do
       let(:assertions) { [double(assert: true, success?: true), double(assert: true, success?: false)] }
       it { is_expected.not_to be_success }
     end
-  end
 
+    context 'when assertion throws exception' do
+      let(:assertion) { Tatami::Models::Assertions::UriAssertion.new }
+      let(:assertions) { [ assertion ] }
+      it {
+        allow(assertion).to receive(:assert).and_raise(ArgumentError)
+        sut.assert(nil, nil)
+        expect(assertion.success?).to eq false
+        expect(assertion.exception). to be_an_instance_of ArgumentError
+      }
+    end
+  end
 end

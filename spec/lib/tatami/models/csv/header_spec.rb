@@ -33,14 +33,14 @@ RSpec.describe Tatami::Models::Csv::Header do
       context 'index is 31' do
         let(:depth) { 1 }
         let(:index) { 31 }
-        it { expect { subject }.to raise_error }
+        it { expect { subject }.to raise_error(ArgumentError, /Invalid header structure/) }
       end
     end
 
     context 'when structure is invalid' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'Root', :depth => 1) }
       subject { Tatami::Models::Csv::Header.get_parent(header, 0, 1) }
-      it { expect { subject }.to raise_error }
+      it { expect { subject }.to raise_error(ArgumentError, /depth <= header.depth/) }
     end
   end
 
@@ -199,7 +199,7 @@ RSpec.describe Tatami::Models::Csv::Header do
 
     context 'xxx' do
       let(:value) { 'xxx' }
-      it { expect { subject }.to raise_error }
+      it { expect { subject }.to raise_error(ArgumentError, /Invalid Data Format/) }
     end
   end
 
@@ -245,7 +245,7 @@ RSpec.describe Tatami::Models::Csv::Header do
 
     context 'xxx' do
       let(:value) { 'xxx' }
-      it { expect { subject }.to raise_error }
+      it { expect { subject }.to raise_error(ArgumentError, /Invalid Data Format/) }
     end
   end
 

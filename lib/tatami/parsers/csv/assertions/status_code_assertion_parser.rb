@@ -10,7 +10,7 @@ module Tatami
             begin
               value = Integer(value, 10).to_s
             rescue => ex
-              raise ArgumentError 'Invalid Data Format. Value of <StatusCode> is not numeric. value=%s' % value
+              raise ArgumentError, 'Invalid Data Format. Value of <StatusCode> is not numeric. value=%s' % value
             end
 
             [ Tatami::Models::Assertions::UriAssertion.new(:value => value) ]

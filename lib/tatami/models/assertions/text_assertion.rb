@@ -15,10 +15,7 @@ module Tatami
 
         def match(value, pattern)
           Regexp.new(pattern) =~ value
-          unless Regexp.last_match.nil?
-            return Regexp.last_match[1]
-          end
-
+          return Regexp.last_match[1] unless Regexp.last_match.nil?
           raise ArgumentError, 'Regex failed to match: value:%s, pattern:%s' % [ value, pattern ]
         end
 
@@ -36,45 +33,28 @@ module Tatami
             end
           end
 
-          if @expected.url_decode
-            @expected_value = URI.decode_www_form_component(@expected_value)
-          end
-
-          if @actual.url_decode
-            @actual_value = URI.decode_www_form_component(@actual_value)
-          end
-
+          @expected_value = URI.decode_www_form_component(@expected_value) if @expected.url_decode
+          @actual_value = URI.decode_www_form_component(@actual_value) if @actual.url_decode
           @success = @expected_value == @actual_value
         end
 
         def get_value(arrange, assertion_item)
-          unless assertion_item.value.nil?
-            return assertion_item.value
-          end
-
+          return assertion_item.value unless assertion_item.value.nil?
           value = arrange.http_response.get_document_value(assertion_item.query, assertion_item.attribute)
-          unless assertion_item.pattern.nil?
-            return match(value, assertion_item.pattern)
-          end
-
+          return match(value, assertion_item.pattern) unless assertion_item.pattern.nil?
           value
         end
 
         def get_values(arrange, assertion_item)
-          unless assertion_item.value.nil?
-            raise ArgumentError 'Static value test for list is not supported.'
-          end
-
+          raise ArgumentError, 'Static value test for list is not supported.' unless assertion_item.value.nil?
           values = arrange.http_response.get_document_values(assertion_item.query, assertion_item.attribute)
           unless assertion_item.pattern.nil?
             list = []
             values.each {|value|
               list.push(match(value, assertion_item.pattern))
             }
-
             return list
           end
-
           values
         end
       end

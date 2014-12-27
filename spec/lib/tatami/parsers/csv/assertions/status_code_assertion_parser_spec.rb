@@ -16,7 +16,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::StatusCodeAssertionParser do
 
     context 'when not valid number' do
       let(:row) { [ nil, 'aa' ] }
-      it { expect { sut }.to raise_error }
+      it { expect { sut }.to raise_error(ArgumentError, /Invalid Data Format/) }
     end
   end
 end

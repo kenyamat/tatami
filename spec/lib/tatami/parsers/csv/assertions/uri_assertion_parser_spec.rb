@@ -16,7 +16,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::UriAssertionParser do
 
     context 'when value does not start slash' do
       let(:row) { [ nil, 'local' ] }
-      it { expect { sut }.to raise_error }
+      it { expect { sut }.to raise_error(ArgumentError, /Invalid Data Format/) }
     end
   end
 end

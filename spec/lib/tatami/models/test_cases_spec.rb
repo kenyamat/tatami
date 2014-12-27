@@ -118,12 +118,12 @@ RSpec.describe Tatami::Models::TestCases do
                   Tatami::Models::Assertions::StatusCodeAssertion.new(:name => 'assertion2', :success => true)
               ])
       ]}
-      it { is_expected.not_to eq nil }
+      it { is_expected.to eq nil }
     end
 
     context 'when test cases are empty' do
       let(:test_cases) { [] }
-      it { is_expected.not_to eq nil }
+      it { is_expected.to eq nil }
     end
 
     context 'when test cases have a failed assertion' do

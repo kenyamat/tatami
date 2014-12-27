@@ -13,11 +13,8 @@ module Tatami
           md = actual.http_response.uri.match('.*://[^/]*(.*)')
           if md
             @actual_value = md[1]
-            if @actual_value.nil? or @actual_value == ''
-              @actual_value = '/'
-            end
+            @actual_value = '/' if @actual_value.to_s.strip == ''
           end
-
           @success = @expected_value == @actual_value
         end
       end

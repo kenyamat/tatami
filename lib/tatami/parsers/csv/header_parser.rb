@@ -9,7 +9,6 @@ module Tatami
               :depth => -1,
               :from => 0,
               :to => data[0].length - 1)
-
           (0..(HEADER_ROW_COUNT - 1)).each do |i|
             row = data[i]
             break if row.nil?

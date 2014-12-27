@@ -25,10 +25,10 @@ RSpec.describe Tatami::Parsers::Csv::TestCaseParser do
       let(:data) { [[ 'test case 1', 'BaseUri', '/local' ]] }
       let(:resources) { {} }
       subject { Tatami::Parsers::Csv::TestCaseParser.parse(header, data, resources) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /header should not be null/) }
     end
 
-    context 'when header is null' do
+    context 'when data is null' do
       let(:header) {
         Tatami::Models::Csv::Header.new(:name => 'Root', :depth => -1, :from => 0, :to => 2, :children => [
             Tatami::Models::Csv::Header.new(:name => 'Arrange', :depth => 0, :from => 1, :to => 1, :children => [
@@ -44,7 +44,7 @@ RSpec.describe Tatami::Parsers::Csv::TestCaseParser do
       let(:data) { nil }
       let(:resources) { {} }
       subject { Tatami::Parsers::Csv::TestCaseParser.parse(header, data, resources) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /data should not be null/) }
     end
 
     context 'when data is empty' do
@@ -63,7 +63,7 @@ RSpec.describe Tatami::Parsers::Csv::TestCaseParser do
       let(:data) { [[]] }
       let(:resources) { {} }
       subject { Tatami::Parsers::Csv::TestCaseParser.parse(header, data, resources) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /Test case's format is invalid/) }
     end
 
     context 'when first data is empty' do
@@ -82,7 +82,7 @@ RSpec.describe Tatami::Parsers::Csv::TestCaseParser do
       let(:data) { [[ '' ]] }
       let(:resources) { {} }
       subject { Tatami::Parsers::Csv::TestCaseParser.parse(header, data, resources) }
-      it { expect { subject }.to raise_error(ArgumentError) }
+      it { expect { subject }.to raise_error(ArgumentError, /Test case\'s format is invalid/) }
     end
   end
 end

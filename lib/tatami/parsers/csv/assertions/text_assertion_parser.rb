@@ -14,7 +14,7 @@ module Tatami
 
           def self.validate(header, row)
             name = Tatami::Models::Csv::Header.get_string(header, Tatami::Constants::HeaderNames::NAME, row)
-            raise ArgumentError 'Invalid Data Format. Value of <Name> has no value.' if name.nil? or name == ''
+            raise ArgumentError, 'Invalid Data Format. Value of <Name> has no value.' if name.to_s.strip == ''
           end
         end
       end

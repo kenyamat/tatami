@@ -21,7 +21,6 @@ module Tatami
               @document_parser = Tatami::Parsers::Documents::TextParser.new(@contents)
           end
         end
-
         @document_parser
       end
 
@@ -29,8 +28,8 @@ module Tatami
         begin
           get_document_parser.exists_node?(xpath, attribute)
         rescue => ex
-          ex.message << ' : Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s' % [get_parser_type, xpath, attribute]
-          raise ex
+          raise ArgumentError, 'Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s, exception=%s, message=%s' %
+              [get_parser_type, xpath, attribute, ex.class, ex.message]
         end
       end
 
@@ -38,8 +37,8 @@ module Tatami
         begin
           get_document_parser.get_document_value(xpath, attribute)
         rescue => ex
-          ex.message << ' : Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s' % [get_parser_type, xpath, attribute]
-          raise ex
+          raise ArgumentError, 'Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s, exception=%s, message=%s' %
+              [get_parser_type, xpath, attribute, ex.class, ex.message]
         end
       end
 
@@ -47,8 +46,8 @@ module Tatami
         begin
           get_document_parser.get_document_values(xpath, attribute)
         rescue => ex
-          ex.message << ' : Failed to get values from document. ParserType=%s, xpath=%s, attribute=%s' % [get_parser_type, xpath, attribute]
-          raise ex
+          raise ArgumentError, 'Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s, exception=%s, message=%s' %
+              [get_parser_type, xpath, attribute, ex.class, ex.message]
         end
       end
 
@@ -56,22 +55,11 @@ module Tatami
 
       def get_parser_type
         content_type = @content_type.downcase
-
-        if content_type.include?('html')
-          return Tatami::Constants::ParserType::HTML
-        end
-
-        if content_type.include?('xml')
-          return Tatami::Constants::ParserType::XML
-        end
-
-        if content_type.include?('javascript') or content_type.include?('json')
-          return Tatami::Constants::ParserType::JAVASCRIPT
-        end
-
+        return Tatami::Constants::ParserType::HTML if content_type.include?('html')
+        return Tatami::Constants::ParserType::XML if content_type.include?('xml')
+        return Tatami::Constants::ParserType::JAVASCRIPT if content_type.include?('javascript') or content_type.include?('json')
         Tatami::Constants::ParserType::TEXT
       end
-
     end
   end
 end

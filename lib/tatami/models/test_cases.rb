@@ -9,20 +9,13 @@ module Tatami
       end
 
       def success?
-        @test_cases.each { |test_case|
-          unless test_case.success?
-            return false
-          end
-        }
+        @test_cases.each { |test_case| return false unless test_case.success? }
         true
       end
 
       def get_failed_cases
         list = []
-        if success?
-          return list
-        end
-
+        return list if success?
         @test_cases.each { |test_case|
           unless test_case.success?
             list.push(test_case)
@@ -70,9 +63,7 @@ module Tatami
       end
 
       def get_failed_message
-        if success?
-          nil
-        end
+        return nil if success?
 
         buffer = ''
         buffer << "Failed Test Cases Count: %s/%s\n" % [get_failed_cases.length, @test_cases.length]

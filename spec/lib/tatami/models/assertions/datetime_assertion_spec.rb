@@ -27,6 +27,12 @@ RSpec.describe Tatami::Models::Assertions::DateTimeAssertion do
           let(:actual_value) { '2014-12-21' }
           it { is_expected.to eq false }
         end
+
+        context 'when invalid format' do
+          let(:expected_value) { '20141220' }
+          let(:actual_value) { '20141221' }
+          it { expect { subject }.to raise_error(ArgumentError, /Failed to parse DateTime/) }
+        end
       end
 
       context 'time' do
