@@ -3,6 +3,11 @@ module Tatami
     class TestCases < ModelBase
       attr_accessor :name, :test_cases
 
+      def initialize(params = nil)
+        super
+        @test_cases ||= []
+      end
+
       def success?
         @test_cases.each { |test_case|
           unless test_case.success?
@@ -101,10 +106,12 @@ module Tatami
         buffer
       end
 
-      def test(http_request_service, hook_for_actual = nil, hook_for_expected = nil)
+      def test(http_request_service, http_request_service_for_expected = nil, hook_for_actual = nil, hook_for_expected = nil)
+        http_request_service_for_expected ||= http_request_service
+
         @test_cases.each { |test_case|
           if test_case.arranges.expected and test_case.arranges.expected.http_request
-            test_case.arranges.expected.http_response = http_request_service.get_response(test_case.arranges.expected.http_request, hook_for_expected)
+            test_case.arranges.expected.http_response = http_request_service_for_expected.get_response(test_case.arranges.expected.http_request, hook_for_expected)
           end
 
           if test_case.arranges.actual

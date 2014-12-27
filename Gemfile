@@ -4,6 +4,7 @@ gem 'nokogiri'
 gem 'builder'
 gem 'activesupport'
 gem 'httpclient'
+gem 'csv_parser', :git => 'https://github.com/kenyamat/csv_parser.git'
 
 group :development, :test do
   gem 'rspec'

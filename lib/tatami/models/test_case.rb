@@ -30,8 +30,8 @@ module Tatami
         @assertions.each { |assertion|
           begin
             assertion.assert(expected, actual)
-          rescue ex
-            assertion.exception = exception
+          rescue => ex
+            assertion.exception = ex
             assertion.success = false
           end
         }

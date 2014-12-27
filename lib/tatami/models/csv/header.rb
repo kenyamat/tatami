@@ -10,7 +10,7 @@ module Tatami
         end
 
         def self.get_parent(header, depth, index)
-          raise ArgumentError 'depth <= header.depth' if depth <= header.depth
+          raise ArgumentError, 'depth <= header.depth' if depth <= header.depth
           return header if depth == 0
 
           parent = header
@@ -18,7 +18,7 @@ module Tatami
             h = parent
             parent.children.each { |child|
               if child.from <= index and child.to >= index
-                return child if child.depth == depth - 1
+                return child if child.depth == (depth - 1)
 
                 parent = child
                 break
@@ -27,7 +27,7 @@ module Tatami
             break if h == parent
           end
 
-          raise 'Invalid header structure: name=%s' % [parent.name]
+          raise ArgumentError, 'Invalid header structure: name=%s' % [parent.name]
         end
 
         def self.get_header(header, index, depth = nil)

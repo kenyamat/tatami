@@ -5,6 +5,7 @@ require "active_support"
 require 'active_support/core_ext'
 require 'uri'
 require 'httpclient'
+require 'csv_parser'
 
 require 'tatami/version'
 
@@ -48,3 +49,8 @@ require 'tatami/parsers/csv/assertions/xsd_assertion_parser'
 require 'tatami/parsers/csv/assertions/uri_assertion_parser'
 require 'tatami/parsers/csv/assertions/status_code_assertion_parser'
 require 'tatami/parsers/csv/assertions/assertions_parser'
+require 'tatami/parsers/csv/http_request_parser'
+require 'tatami/parsers/csv/arranges_parser'
+require 'tatami/parsers/csv/header_parser'
+require 'tatami/parsers/csv/test_case_parser'
+require 'tatami/parsers/csv/test_cases_parser'
