@@ -13,7 +13,7 @@ module Tatami
               raise ArgumentError, 'Invalid Data Format. Value of <StatusCode> is not numeric. value=%s' % value
             end
 
-            [ Tatami::Models::Assertions::UriAssertion.new(:value => value) ]
+            [ Tatami::Models::Assertions::StatusCodeAssertion.new(:value => value) ]
           end
         end
       end

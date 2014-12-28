@@ -1,4 +1,4 @@
-module Tatami
+﻿module Tatami
   module Models
     class TestCases < ModelBase
       attr_accessor :name, :test_cases
@@ -26,6 +26,7 @@ module Tatami
 
       def get_result_message
         buffer = ''
+        buffer.force_encoding("UTF-8")
         buffer << "Test Cases Count: %s/%s\n" % [get_failed_cases.length, @test_cases.length]
 
         @test_cases.each { |test_case|

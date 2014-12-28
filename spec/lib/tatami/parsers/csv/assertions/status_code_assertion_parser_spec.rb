@@ -6,6 +6,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::StatusCodeAssertionParser do
 
     context 'when valid number' do
       let(:row) { [ nil, '200' ] }
+      it { expect(sut[0]).to be_instance_of(Tatami::Models::Assertions::StatusCodeAssertion) }
       it { expect(sut[0].value).to eq '200' }
     end
 

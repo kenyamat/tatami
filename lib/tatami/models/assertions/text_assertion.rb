@@ -7,10 +7,11 @@ module Tatami
         def initialize(params = nil)
           super
           @is_list ||= false
+          @key ||= nil
         end
 
         def get_name
-          '%s(%s)' % [ Tatami::Constants::HeaderNames::COOKIES, @key ]
+          @name
         end
 
         def match(value, pattern)
@@ -20,7 +21,7 @@ module Tatami
         end
 
         def assert(expected, actual)
-          if @expected.exists
+          unless @expected.exists.nil?
             @expected_value = 'Node exists: %s' % @expected.exists
             @actual_value = 'Node exists: %s' % actual.http_response.exists_node?(@actual.query, @actual.attribute)
           else

@@ -6,6 +6,7 @@ module Tatami
       def initialize(params = nil)
         super
         @document_parser ||= nil
+        @contents ||= nil
       end
 
       def get_document_parser
@@ -49,6 +50,10 @@ module Tatami
           raise ArgumentError, 'Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s, exception=%s, message=%s' %
               [get_parser_type, xpath, attribute, ex.class, ex.message]
         end
+      end
+
+      def to_s
+        "uri=#{uri}, status_code=#{status_code}, last_modified=#{last_modified}, content_type=#{content_type}, headers=#{headers}, cookies=#{cookies}, exception=#{exception}"
       end
 
       private

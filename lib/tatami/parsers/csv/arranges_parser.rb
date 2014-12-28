@@ -13,11 +13,11 @@ module Tatami
               when Tatami::Constants::HeaderNames::HTTP_REQUEST_EXPECTED
                 arranges.expected = Tatami::Models::Arrange.new(
                   :name => 'Expected',
-                  :http_request => Tatami::Parsers::Csv::HttpRequestParser.parse(header, data, Tatami::Constants::HeaderNames::EXPECTED))
+                  :http_request => Tatami::Parsers::Csv::HttpRequestParser.parse(http_request_header, data, Tatami::Constants::HeaderNames::EXPECTED))
               when Tatami::Constants::HeaderNames::HTTP_REQUEST_ACTUAL
                 arranges.actual = Tatami::Models::Arrange.new(
                   :name => 'Actual',
-                  :http_request => Tatami::Parsers::Csv::HttpRequestParser.parse(header, data, Tatami::Constants::HeaderNames::ACTUAL))
+                  :http_request => Tatami::Parsers::Csv::HttpRequestParser.parse(http_request_header, data, Tatami::Constants::HeaderNames::ACTUAL))
               else
                 raise ArgumentError, 'Invalid HttpRequest name. Expected is \'HttpRequest Expected\' or \'HttpRequest Actual\'. name=%s' % [http_request_header.name]
             end

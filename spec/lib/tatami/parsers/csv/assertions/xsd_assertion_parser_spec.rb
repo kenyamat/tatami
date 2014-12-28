@@ -7,6 +7,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::XsdAssertionParser do
 
     context 'when value is set' do
       let(:row) { [ nil, 'xsd1' ] }
+      it { expect(sut[0]).to be_instance_of(Tatami::Models::Assertions::XsdAssertion) }
       it { expect(sut[0].xsd).to eq 'xsd1value' }
     end
 

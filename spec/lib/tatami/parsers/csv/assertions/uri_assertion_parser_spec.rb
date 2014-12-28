@@ -6,6 +6,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::UriAssertionParser do
 
     context 'when value starts slash' do
       let(:row) { [ nil, '/local' ] }
+      it { expect(sut[0]).to be_instance_of(Tatami::Models::Assertions::UriAssertion) }
       it { expect(sut[0].value).to eq '/local' }
     end
 

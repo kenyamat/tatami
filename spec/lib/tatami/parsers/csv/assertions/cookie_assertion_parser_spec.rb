@@ -11,6 +11,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::CookiesAssertionParser do
     context 'when all values are set' do
       let(:row) { [ nil, 'cookie1value', 'cookie2value' ] }
       it { expect(sut.length).to eq 2 }
+      it { expect(sut[0]).to be_instance_of(Tatami::Models::Assertions::CookieAssertion) }
       it { expect(sut[0].key).to eq 'Cookie1' }
       it { expect(sut[0].value).to eq 'cookie1value' }
       it { expect(sut[1].key).to eq 'Cookie2' }

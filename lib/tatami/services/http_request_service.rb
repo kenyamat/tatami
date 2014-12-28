@@ -34,12 +34,12 @@ module Tatami
 
         response = get_request(http_client, http_request.method, request_uri, headers, http_request.content)
         http_response = Tatami::Models::HttpResponse.new(
-            :content => response.content,
+            :contents => response.content,
             :status_code => response.status,
             :uri => response.http_header.request_uri.to_s,
             :content_type => response.content_type,
             :headers => response.headers,
-            :cookies => Hash[response.cookies.map { |c| [c.name, c.value] }] # ruby2.1~ response.cookies.map { |c| [c.name, c.value] }.to_h)
+            :cookies => response.cookies ? Hash[response.cookies.map { |c| [c.name, c.value] }] : {} # ruby2.1~ response.cookies.map { |c| [c.name, c.value] }.to_h)
         )
         http_response
       end
@@ -47,7 +47,7 @@ module Tatami
       def get_request(http_client, method, request_uri, headers, content)
         params = { :header => headers, :follow_redirect => true }
         params[:body] = content if content
-        case method.upcase
+        case method.to_s.upcase
           when 'DELETE' then
             http_client.delete(request_uri, params)
           when 'POST' then

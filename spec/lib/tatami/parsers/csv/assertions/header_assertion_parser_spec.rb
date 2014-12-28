@@ -11,6 +11,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::HeadersAssertionParser do
     context 'when all values are set' do
       let(:row) { [ nil, 'text/html', '15:29:20' ] }
       it { expect(sut.length).to eq 2 }
+      it { expect(sut[0]).to be_instance_of(Tatami::Models::Assertions::HeaderAssertion) }
       it { expect(sut[0].key).to eq 'Content-Type' }
       it { expect(sut[0].value).to eq 'text/html' }
       it { expect(sut[1].key).to eq 'Last-Modified' }
