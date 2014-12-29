@@ -11,8 +11,10 @@ RSpec.describe Tatami::Parsers::Csv::ArrangesParser do
         ])
       }
       let(:row) { [ nil, 'ExpectedSite', 'TargetSite' ] }
-      it { expect(sut.expected.name).to eq 'Expected' }
-      it { expect(sut.actual.name).to eq 'Actual' }
+      it {
+        expect(sut.expected.name).to eq 'Expected'
+        expect(sut.actual.name).to eq 'Actual'
+      }
     end
 
     context 'when header is null' do

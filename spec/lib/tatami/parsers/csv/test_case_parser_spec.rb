@@ -16,8 +16,10 @@ RSpec.describe Tatami::Parsers::Csv::TestCaseParser do
       }
       let(:data) { [[ 'test case 1', 'BaseUri', '/local' ]] }
       let(:resources) { {} }
-      it { expect(sut.name).to eq 'test case 1' }
-      it { expect(sut.assertions.length).to eq 1 }
+      it {
+        expect(sut.name).to eq 'test case 1'
+        expect(sut.assertions.length).to eq 1
+      }
     end
 
     context 'when header is null' do

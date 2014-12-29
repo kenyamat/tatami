@@ -143,34 +143,4 @@ RSpec.describe Tatami::Services::HttpRequestService do
       it { expect(http_client).to have_received(:delete).with(request_uri, params) }
     end
   end
-
-  # describe '#get_response' do
-  #   let(:method) { nil }
-  #   let(:request_uri) { 'http://a.com' }
-  #   let(:headers) { {} }
-  #   let(:content) { 'test' }
-  #   let(:params) { {:body => content, :header => headers, :follow_redirect => true } }
-  #   before { sut.get_response(http_request, request_uri, headers, content) }
-  #
-  #   context 'GET' do
-  #     let(:method) { 'get' }
-  #     it { expect(http_client).to have_received(:get).with(request_uri, params) }
-  #   end
-  #
-  #   context 'POST' do
-  #     let(:method) { 'post' }
-  #     it { expect(http_client).to have_received(:post).with(request_uri, params) }
-  #   end
-  #
-  #   context 'PUT' do
-  #     let(:method) { 'put' }
-  #     it { expect(http_client).to have_received(:put).with(request_uri, params) }
-  #   end
-  #
-  #   context 'DELETE' do
-  #     let(:method) { 'delete' }
-  #     it { expect(http_client).to have_received(:delete).with(request_uri, params) }
-  #   end
-  # end
-
 end

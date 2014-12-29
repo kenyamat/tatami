@@ -14,11 +14,13 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::TextAssertionParser do
 
     context 'when all values are set' do
       let(:row) { [ nil, 'name', 'true', 'a', 'b' ] }
-      it { expect(sut[0]).to be_instance_of(Tatami::Models::Assertions::TextAssertion) }
-      it { expect(sut[0].name).to eq 'name' }
-      it { expect(sut[0].is_list).to eq true }
-      it { expect(sut[0].expected.value).to eq 'a' }
-      it { expect(sut[0].actual.value).to eq 'b' }
+      it {
+        expect(sut[0]).to be_instance_of(Tatami::Models::Assertions::TextAssertion)
+        expect(sut[0].name).to eq 'name'
+        expect(sut[0].is_list).to eq true
+        expect(sut[0].expected.value).to eq 'a'
+        expect(sut[0].actual.value).to eq 'b'
+      }
     end
 
     context 'when name is nil' do

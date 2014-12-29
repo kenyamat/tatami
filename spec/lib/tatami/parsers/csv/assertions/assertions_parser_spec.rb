@@ -26,10 +26,12 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::AssertionsParser do
               Tatami::Models::Csv::Header.new(:name => 'Last-Modified', :depth => 2, :from => 2, :to => 2)])
           ])}
       let(:row) { [[ nil, 'text/html', '15:29:20' ]] }
-      it { expect(sut[0].key).to eq 'Content-Type' }
-      it { expect(sut[0].value).to eq 'text/html' }
-      it { expect(sut[1].key).to eq 'Last-Modified' }
-      it { expect(sut[1].value).to eq '15:29:20' }
+      it {
+        expect(sut[0].key).to eq 'Content-Type'
+        expect(sut[0].value).to eq 'text/html'
+        expect(sut[1].key).to eq 'Last-Modified'
+        expect(sut[1].value).to eq '15:29:20'
+      }
     end
 
     context 'Cookies' do
@@ -39,18 +41,20 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::AssertionsParser do
               Tatami::Models::Csv::Header.new(:name => 'Cookie2', :depth => 2, :from => 2, :to => 2)])
       ])}
       let(:row) { [[ nil, 'cookie1value', 'cookie2value' ]] }
-      it { expect(sut[0].key).to eq 'Cookie1' }
-      it { expect(sut[0].value).to eq 'cookie1value' }
-      it { expect(sut[1].key).to eq 'Cookie2' }
-      it { expect(sut[1].value).to eq 'cookie2value' }
+      it {
+        expect(sut[0].key).to eq 'Cookie1'
+        expect(sut[0].value).to eq 'cookie1value'
+        expect(sut[1].key).to eq 'Cookie2'
+        expect(sut[1].value).to eq 'cookie2value'
+      }
     end
 
     context 'XSD' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'Assertion', :depth => 0, :from => 0, :to => 1, :children => [
           Tatami::Models::Csv::Header.new(:name => 'Xsd', :depth => 1, :from => 1, :to => 1)
       ])}
-      let(:row) { [[ nil, 'xsd1' ]] }
-      let(:resources) { { 'xsd1' => 'xsd1value'} }
+      let(:row) { [[ nil, :xsd1 ]] }
+      let(:resources) { { :xsd1 => 'xsd1value'} }
       it { expect(sut[0].xsd).to eq 'xsd1value' }
     end
 
@@ -66,8 +70,10 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::AssertionsParser do
           [ nil, 'DateTime Test', 'true', nil ],
           [ nil, 'Time Test', nil, 'true' ]
       ] }
-      it { expect(sut[0].is_time).to eq false }
-      it { expect(sut[1].is_time).to eq true }
+      it {
+        expect(sut[0].is_time).to eq false
+        expect(sut[1].is_time).to eq true
+      }
     end
 
     context 'no item' do

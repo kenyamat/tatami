@@ -40,7 +40,6 @@ module Tatami
               raise ArgumentError, 'attribute not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_node.attribute(attribute).nil?
               value = html_node.attribute(attribute).value
             end
-
             list.push(value)
           end
           list

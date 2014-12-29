@@ -15,7 +15,6 @@ module Tatami
             result = false
             text = ex.to_s
           end
-
           @expected_value = 'True'
           @actual_value = result ? 'True' : 'Exception=<%s>' % text
           @success = @expected_value == @actual_value

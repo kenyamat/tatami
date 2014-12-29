@@ -284,7 +284,7 @@ RSpec.describe Tatami::Models::Csv::Header do
     end
     context 'when hash is not existed' do
       let(:row) { ['case name', 'ExpectedSite', nil, nil, nil] }
-      it { is_expected.to include() }
+      it { is_expected.to include }
     end
   end
 end

@@ -33,12 +33,12 @@ module Tatami
               @actual_value = get_value(actual, @actual)
             end
           end
-
           @expected_value = URI.decode_www_form_component(@expected_value) if @expected.url_decode
           @actual_value = URI.decode_www_form_component(@actual_value) if @actual.url_decode
           @success = @expected_value == @actual_value
         end
 
+        private
         def get_value(arrange, assertion_item)
           return assertion_item.value unless assertion_item.value.nil?
           value = arrange.http_response.get_document_value(assertion_item.query, assertion_item.attribute)

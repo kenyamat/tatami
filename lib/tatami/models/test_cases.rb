@@ -105,11 +105,9 @@
           if test_case.arranges.expected and test_case.arranges.expected.http_request
             test_case.arranges.expected.http_response = http_request_service_for_expected.get_response(test_case.arranges.expected.http_request, hook_for_expected)
           end
-
           if test_case.arranges.actual
             test_case.arranges.actual.http_response = http_request_service.get_response(test_case.arranges.actual.http_request, hook_for_actual)
           end
-
           test_case.assert(test_case.arranges.expected, test_case.arranges.actual)
         }
         self

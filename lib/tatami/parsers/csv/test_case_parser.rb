@@ -8,7 +8,6 @@ module Tatami
           if data.length == 0 or data[0].length == 0 or data[0][0].to_s.strip == ''
             raise ArgumentError, 'Test case\'s format is invalid. data.Count == 0 || data[0].Count == 0 || string.IsNullOrWhiteSpace(data[0][0]).'
           end
-
           Tatami::Models::TestCase.new(
               :name => data[0][0],
               :arranges => Tatami::Parsers::Csv::ArrangesParser.parse(header.children[0], data[0]),

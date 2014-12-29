@@ -94,9 +94,11 @@ RSpec.describe Tatami::Parsers::Csv::TestCasesParser do
         </body></html>
         EOS
       end
-      it { expect(sut.success?).to eq false }
-      it { expect(sut.get_failed_cases.length).to eq 1 }
-      it { expect(sut.get_failed_cases[0].get_failed_assertions.length).to eq 2 }
+      it {
+        expect(sut.success?).to eq false
+        expect(sut.get_failed_cases.length).to eq 1
+        expect(sut.get_failed_cases[0].get_failed_assertions.length).to eq 2
+      }
     end
 
     context 'when static cases' do

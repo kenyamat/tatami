@@ -7,6 +7,7 @@ require 'uri'
 require 'httpclient'
 require 'csv_parser'
 
+# version
 require 'tatami/version'
 
 # constants

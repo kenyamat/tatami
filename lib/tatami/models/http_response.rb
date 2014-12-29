@@ -57,7 +57,6 @@ module Tatami
       end
 
       private
-
       def get_parser_type
         content_type = @content_type.downcase
         return Tatami::Constants::ParserType::HTML if content_type.include?('html')

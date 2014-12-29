@@ -15,28 +15,32 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::ContentAssertionItemParser do
 
     context 'when all values are set' do
       let(:row) { [ nil, 'key', 'value', 'query', 'attribute', 'true', 'pattern', 'format', 'en-US', 'true' ] }
-      it { expect(sut.key).to eq 'key' }
-      it { expect(sut.value).to eq 'value' }
-      it { expect(sut.query).to eq 'query' }
-      it { expect(sut.attribute).to eq 'attribute' }
-      it { expect(sut.exists).to eq true }
-      it { expect(sut.pattern).to eq 'pattern' }
-      it { expect(sut.format).to eq 'format' }
-      it { expect(sut.format_culture).to eq 'en-US' }
-      it { expect(sut.url_decode).to eq true }
+      it {
+        expect(sut.key).to eq 'key'
+        expect(sut.value).to eq 'value'
+        expect(sut.query).to eq 'query'
+        expect(sut.attribute).to eq 'attribute'
+        expect(sut.exists).to eq true
+        expect(sut.pattern).to eq 'pattern'
+        expect(sut.format).to eq 'format'
+        expect(sut.format_culture).to eq 'en-US'
+        expect(sut.url_decode).to eq true
+      }
     end
 
     context 'when all values are nil' do
       let(:row) { [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil ] }
-      it { expect(sut.key).to eq nil }
-      it { expect(sut.value).to eq nil }
-      it { expect(sut.query).to eq nil }
-      it { expect(sut.attribute).to eq nil }
-      it { expect(sut.exists).to eq nil }
-      it { expect(sut.pattern).to eq nil }
-      it { expect(sut.format).to eq nil }
-      it { expect(sut.format_culture).to eq nil }
-      it { expect(sut.url_decode).to eq false }
+      it {
+        expect(sut.key).to eq nil
+        expect(sut.value).to eq nil
+        expect(sut.query).to eq nil
+        expect(sut.attribute).to eq nil
+        expect(sut.exists).to eq nil
+        expect(sut.pattern).to eq nil
+        expect(sut.format).to eq nil
+        expect(sut.format_culture).to eq nil
+        expect(sut.url_decode).to eq false
+      }
     end
 
   end

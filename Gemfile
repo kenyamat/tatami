@@ -1,15 +1,11 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'nokogiri'
-gem 'builder'
-gem 'activesupport'
-gem 'httpclient'
+# see more dependencies on tatami::gemspec
 gem 'csv_parser', :git => 'https://github.com/kenyamat/csv_parser.git'
 
 group :development, :test do
-  gem 'rspec'
+  gem 'rspec', '~> 3.1'
   gem 'simplecov'
 end
 
-# Specify your gem's dependencies in tatami.gemspec
 gemspec
