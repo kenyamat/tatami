@@ -12,6 +12,20 @@ Please see [.NET version](https://github.com/kenyamat/Tatami-dotnet).
 * Can be integrated in major test frameworks and CI.
 	* RSpec, Test::Unit, Cucumber, Jenkins etc.
 
+Tatami enables you to reduce test codes and help review for test cases.
+
+## Contents
+* [Scope](#Scope)
+* [Functions](#Functions)
+* [Showcase](#Showcase)
+* [Implementation](#Implementation)
+	* [How to create a test case CSV](#CSV_implementation)
+	* [How to create BaseUriMapping.xml](#BaseUriMapping.xml_settings)
+	* [How to create UserAgentMapping.xml](#UserAgentMapping.xml_settings)
+* [Setup steps](#Setup_steps)
+* [Dependencies](#Dependencies)
+* [Copyright](#Copyright)
+
 ## <a name="Scope">Scope</a>
 This library covers the following test types.
 * Integration Test
