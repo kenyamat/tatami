@@ -16,10 +16,9 @@ module Tatami
     def test
       csv_parser = CsvParser::Parser.new
       test_cases = Tatami::Parsers::Csv::TestCasesParser.parse(csv_parser.parse(@test_case_csv))
-      http_request_service = Tatami::Services::HttpRequestService.new(
-          :base_uri_mapping => @base_uri_mapping,
-          :user_agent_mapping => @user_agent_mapping,
-          :proxy_uri => @proxy_uri)
+      http_client = HTTPClient.new
+      http_client.proxy = @proxy_uri if @proxy_uri
+      http_request_service = Tatami::Services::HttpRequestService.new(http_client, @base_uri_mapping, @user_agent_mapping)
       test_cases.test(http_request_service, @expected_request_hook, @actual_request_hook)
       test_cases
     end

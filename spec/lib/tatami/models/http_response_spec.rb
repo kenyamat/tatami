@@ -94,5 +94,20 @@ RSpec.describe Tatami::Models::HttpResponse do
         }
       end
     end
+
+    describe '#to_s' do
+      let(:sut) { Tatami::Models::HttpResponse.new(
+          uri: 'uri',
+          status_code: 'status_code',
+          content_type: 'content_type',
+          last_modified: 'last_modified',
+          headers: 'headers',
+          cookies: 'cookies',
+          contents: 'contents',
+          exception: 'exception'
+      ) }
+      subject { sut.to_s }
+      it { is_expected.to eq 'uri=uri, status_code=status_code, last_modified=last_modified, content_type=content_type, headers=headers, cookies=cookies, exception=exception' }
+    end
   end
 end

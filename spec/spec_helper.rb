@@ -16,6 +16,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'rspec'
+require 'simplecov'
 require 'tatami'
 
 RSpec.configure do |config|

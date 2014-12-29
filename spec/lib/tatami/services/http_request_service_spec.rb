@@ -1,5 +1,32 @@
 RSpec.describe Tatami::Services::HttpRequestService do
-  let(:sut) { Tatami::Services::HttpRequestService.new }
+  let(:http_client) { spy('http_client') }
+  let(:base_uri_mapping) { nil }
+  let(:user_agent_mapping) { nil }
+  let(:sut) { Tatami::Services::HttpRequestService.new(http_client, base_uri_mapping, user_agent_mapping) }
+
+  describe '#get_response' do
+    let(:base_uri_mapping) { { 'test' => 'http://a.com' } }
+    let(:http_request) { Tatami::Models::HttpRequest.new(base_uri: 'test') }
+    subject { sut.get_response(http_request) }
+
+    context 'when valid' do
+      let(:response) { double(:content => '<html><body>a</body></html>',
+                              :status => 200,
+                              :http_header => double(:request_uri => 'http://b.com'),
+                              :content_type => 'text/html',
+                              :headers => { 'h1' => 'h1v', 'h2' => 'h2v' },
+                              :cookies => [ double(:name => 'c1', :value => 'c1v'), double(:name => 'c2', :value => 'c2v') ]) }
+      it {
+        allow(http_client).to receive(:get).and_return(response)
+        expect(subject.contents).to eq '<html><body>a</body></html>'
+        expect(subject.status_code).to eq 200
+        expect(subject.uri).to eq 'http://b.com'
+        expect(subject.content_type).to eq 'text/html'
+        expect(subject.headers).to eq({ 'h1' => 'h1v', 'h2' => 'h2v' })
+        expect(subject.cookies).to eq({ 'c1' => 'c1v', 'c2' => 'c2v' })
+      }
+    end
+  end
 
   describe '#create_uri' do
     let(:base_uri) { 'http://a.com' }
@@ -68,29 +95,82 @@ RSpec.describe Tatami::Services::HttpRequestService do
     end
   end
 
-  # TODO: more tests
+  describe '#create_headers' do
+    let(:headers) { nil }
+    let(:cookies) { nil }
+    let(:user_agent) { nil }
+    let(:http_request) { Tatami::Models::HttpRequest.new(headers: headers, cookies: cookies, user_agent: user_agent) }
+    subject { sut.create_headers(http_request) }
+
+    context 'when headers is empty' do
+      it { is_expected.to eq({}) }
+    end
+
+    context 'when there is all values' do
+      let(:headers) { { 'h1' => 'h1v' } }
+      let(:cookies) { { 'c1' => 'c1v' } }
+      let(:user_agent_mapping) { { 'IE10' => 'Mozilla/5.0'} }
+      let(:user_agent) { 'IE10' }
+      it { is_expected.to eq({ "h1" => "h1v", "Cookie" => "c1=c1v", "User-Agent" => "Mozilla/5.0" }) }
+    end
+  end
+
+  describe '#execute_request' do
+    let(:method) { nil }
+    let(:request_uri) { 'http://a.com' }
+    let(:headers) { {} }
+    let(:content) { 'test' }
+    let(:params) { {:body => content, :header => headers, :follow_redirect => true } }
+    before { sut.execute_request(method, request_uri, headers, content) }
+
+    context 'GET' do
+      let(:method) { 'get' }
+      it { expect(http_client).to have_received(:get).with(request_uri, params) }
+    end
+
+    context 'POST' do
+      let(:method) { 'post' }
+      it { expect(http_client).to have_received(:post).with(request_uri, params) }
+    end
+
+    context 'PUT' do
+      let(:method) { 'put' }
+      it { expect(http_client).to have_received(:put).with(request_uri, params) }
+    end
+
+    context 'DELETE' do
+      let(:method) { 'delete' }
+      it { expect(http_client).to have_received(:delete).with(request_uri, params) }
+    end
+  end
+
   # describe '#get_response' do
-  #   let(:proxy_uri) { 'http://localhost:8888' }
-  #   let(:request) { Tatami::Models::HttpRequest.new(params)}
-  #   let(:sut) {
-  #     Tatami::Services::HttpRequestService.new(
-  #         :base_uri_mapping => { 'yahoo' => 'http://weather.yahoo.co.jp' },
-  #         :user_agent_mapping => { 'ie' => 'IE' },
-  #         :proxy_uri => proxy_uri) }
+  #   let(:method) { nil }
+  #   let(:request_uri) { 'http://a.com' }
+  #   let(:headers) { {} }
+  #   let(:content) { 'test' }
+  #   let(:params) { {:body => content, :header => headers, :follow_redirect => true } }
+  #   before { sut.get_response(http_request, request_uri, headers, content) }
   #
-  #   subject { sut.get_response(request, nil, Proc.new { |r| p r }) }
+  #   context 'GET' do
+  #     let(:method) { 'get' }
+  #     it { expect(http_client).to have_received(:get).with(request_uri, params) }
+  #   end
   #
-  #   context 'get' do
-  #     let(:params) { {:base_uri => 'yahoo',
-  #                     :method => 'DELETE',
-  #                     :user_agent => 'ie',
-  #                     :headers => { 'x-header' => 'test' },
-  #                     :cookies => { 'c1' => 'cv1' },
-  #                     :path_infos => %w(weather jp 13 4410.html),
-  #                     :query_strings => { 'a' => 'b' },
-  #                     :fragment => 'test',
-  #                     :content => 'content' } }
-  #     it { is_expected.to eq '' }
+  #   context 'POST' do
+  #     let(:method) { 'post' }
+  #     it { expect(http_client).to have_received(:post).with(request_uri, params) }
+  #   end
+  #
+  #   context 'PUT' do
+  #     let(:method) { 'put' }
+  #     it { expect(http_client).to have_received(:put).with(request_uri, params) }
+  #   end
+  #
+  #   context 'DELETE' do
+  #     let(:method) { 'delete' }
+  #     it { expect(http_client).to have_received(:delete).with(request_uri, params) }
   #   end
   # end
+
 end

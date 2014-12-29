@@ -50,15 +50,29 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
       it { is_expected.to eq true }
     end
 
-    context 'when invalid name' do
+    context 'when there is no HttpRequest Actual' do
       let(:header) {
         Tatami::Models::Csv::Header.new(:name => 'Arrange', :depth => 0, :from => 0, :to => 0, :children => [
-            Tatami::Models::Csv::Header.new(:name => 'XXX', :depth => 1, :from => 0, :to => 0, :children => [
+            Tatami::Models::Csv::Header.new(:name => 'HttpRequest Expected', :depth => 1, :from => 0, :to => 0, :children => [
                 Tatami::Models::Csv::Header.new(:name => 'BaseUri', :depth => 2, :from => 0, :to => 0)
             ])
         ])
       }
       it { expect { subject }.to raise_error(ArgumentError, /Arrange should have <HttpRequest Actual>/) }
+    end
+
+    context 'when there is invalid node' do
+      let(:header) {
+        Tatami::Models::Csv::Header.new(:name => 'Arrange', :depth => 0, :from => 0, :to => 0, :children => [
+            Tatami::Models::Csv::Header.new(:name => 'XXX', :depth => 1, :from => 0, :to => 0, :children => [
+                Tatami::Models::Csv::Header.new(:name => 'BaseUri', :depth => 2, :from => 0, :to => 0)
+            ]),
+            Tatami::Models::Csv::Header.new(:name => 'HttpRequest Actual', :depth => 1, :from => 0, :to => 0, :children => [
+                Tatami::Models::Csv::Header.new(:name => 'BaseUri', :depth => 2, :from => 0, :to => 0)
+            ])
+        ])
+      }
+      it { expect { subject }.to raise_error(ArgumentError, /<Arrange> has unknown child./) }
     end
 
     context 'when there is no children' do
@@ -276,19 +290,20 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
       it { expect { subject }.to raise_error(ArgumentError, /<Name> should have no children./) }
     end
 
-    context 'when Expected has invalid child' do
+    context 'when there is invalid child' do
       let(:header) {
-        Tatami::Models::Csv::Header.new(:name => 'Contents', :depth => 1, :from => 1, :to => 4, :children => [
+        Tatami::Models::Csv::Header.new(:name => 'Contents', :depth => 1, :from => 1, :to => 3, :children => [
             Tatami::Models::Csv::Header.new(:name => 'Name', :depth => 2, :from => 1, :to => 1),
-            Tatami::Models::Csv::Header.new(:name => 'Expected', :depth => 2, :from => 2, :to => 2, :children => [
-                Tatami::Models::Csv::Header.new(:name => 'XX', :depth => 3, :from => 2, :to => 2),
+            Tatami::Models::Csv::Header.new(:name => 'XXX', :depth => 2, :from => 2, :to => 2),
+            Tatami::Models::Csv::Header.new(:name => 'Expected', :depth => 2, :from => 5, :to => 5, :children => [
+                Tatami::Models::Csv::Header.new(:name => 'Value', :depth => 3, :from => 5, :to => 5),
             ]),
-            Tatami::Models::Csv::Header.new(:name => 'Actual', :depth => 2, :from => 3, :to => 3, :children => [
-                Tatami::Models::Csv::Header.new(:name => 'Value', :depth => 3, :from => 3, :to => 3),
+            Tatami::Models::Csv::Header.new(:name => 'Actual', :depth => 2, :from => 6, :to => 6, :children => [
+                Tatami::Models::Csv::Header.new(:name => 'Value', :depth => 3, :from => 6, :to => 6),
             ]),
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<Expected> has a unknown child. Name=XX/) }
+      it { expect { subject }.to raise_error(ArgumentError, /<Contents> has a unknown child./) }
     end
   end
 

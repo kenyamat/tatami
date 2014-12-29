@@ -136,6 +136,7 @@ RSpec.describe Tatami::Models::TestCases do
                   :actual => Tatami::Models::Arrange.new),
               :assertions => [
                   Tatami::Models::Assertions::StatusCodeAssertion.new(:name => 'assertion1', :success => true),
+                  Tatami::Models::Assertions::StatusCodeAssertion.new(:name => 'assertion2', :success => false,),
                   Tatami::Models::Assertions::StatusCodeAssertion.new(:name => 'assertion2', :success => false, :exception => SyntaxError.new)
               ])
       ]}

@@ -2,6 +2,7 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
   let(:expected) { Tatami::Models::Assertions::ContentAssertionItem.new(expected_params) }
   let(:sut) {
     Tatami::Models::Assertions::TextAssertion.new(
+      name: 'assert1',
       is_list: is_list,
       expected: expected,
       actual: Tatami::Models::Assertions::ContentAssertionItem.new(actual_params))
@@ -9,6 +10,14 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
   let(:expected_params) { {} }
   let(:actual_params) { {} }
   let(:is_list) { false }
+
+  describe '#get_name' do
+    subject { sut.get_name }
+
+    context 'when valid' do
+      it { is_expected.to eq 'assert1' }
+    end
+  end
 
   describe '#match' do
     subject { sut.match(value, ':(.*)') }
@@ -98,6 +107,13 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
           allow(expected).to receive(:value) { 'vvvv' }
           expect { subject }.to raise_error(ArgumentError, /Static value test/)
         }
+      end
+
+      context 'when regex' do
+        let(:expected_value) { %w(a b) }
+        let(:actual_value) { %w(cc:a cc:b) }
+        let(:actual_params) { { :pattern => ':(.*)' } }
+        it { is_expected.to eq true }
       end
     end
   end
