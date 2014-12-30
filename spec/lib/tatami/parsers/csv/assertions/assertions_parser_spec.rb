@@ -93,7 +93,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::AssertionsParser do
           Tatami::Models::Csv::Header.new(:name => 'XXX', :depth => 1, :from => 1, :to => 1)
       ])}
       let(:row) { [[ nil, 'test' ]] }
-      it { expect { sut }.to raise_error(ArgumentError, /Invalid Assertion name/) }
+      it { expect { sut }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid Assertion name/) }
     end
   end
 end

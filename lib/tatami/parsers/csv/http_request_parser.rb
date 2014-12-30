@@ -35,7 +35,7 @@ module Tatami
         def self.validate(header, row, name)
           base_uri = Tatami::Models::Csv::Header.get_string(header, Tatami::Constants::HeaderNames::BASE_URI, row)
           if base_uri.nil?
-            raise ArgumentError, '<BaseUri> should be not null. name=%s' % [name]
+            raise Tatami::Parsers::WrongFileFormatError, '<BaseUri> should be not null. name=%s' % [name]
           end
         end
       end

@@ -65,7 +65,7 @@ RSpec.describe Tatami::Parsers::Csv::TestCaseParser do
       let(:data) { [[]] }
       let(:resources) { {} }
       subject { Tatami::Parsers::Csv::TestCaseParser.parse(header, data, resources) }
-      it { expect { subject }.to raise_error(ArgumentError, /Test case's format is invalid/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Test case's format is invalid/) }
     end
 
     context 'when first data is empty' do
@@ -84,7 +84,7 @@ RSpec.describe Tatami::Parsers::Csv::TestCaseParser do
       let(:data) { [[ '' ]] }
       let(:resources) { {} }
       subject { Tatami::Parsers::Csv::TestCaseParser.parse(header, data, resources) }
-      it { expect { subject }.to raise_error(ArgumentError, /Test case\'s format is invalid/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Test case\'s format is invalid/) }
     end
   end
 end

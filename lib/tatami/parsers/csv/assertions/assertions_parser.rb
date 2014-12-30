@@ -33,7 +33,7 @@ module Tatami
                       assertions = Tatami::Parsers::Csv::Assertions::TextAssertionParser.parse(header, row)
                     end
                   else
-                    raise ArgumentError, 'Invalid Assertion name. name=%s' % [assertion_header_item.name]
+                    raise Tatami::Parsers::WrongFileFormatError, 'Invalid Assertion name. name=%s' % [assertion_header_item.name]
                 end
                 list.concat(assertions)
                 j = header.to

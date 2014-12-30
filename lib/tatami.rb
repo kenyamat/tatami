@@ -37,6 +37,7 @@ require 'tatami/models/csv/header'
 require 'tatami/services/http_request_service'
 
 # parsers
+require 'tatami/parsers/wrong_file_format_error'
 require 'tatami/parsers/mappings/mapping_parser'
 require 'tatami/parsers/documents/xml_parser'
 require 'tatami/parsers/documents/html_parser'

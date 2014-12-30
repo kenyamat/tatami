@@ -25,7 +25,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::TextAssertionParser do
 
     context 'when name is nil' do
       let(:row) { [ nil, nil, 'false', 'a', 'b' ] }
-      it { expect { sut }.to raise_error(ArgumentError, /Invalid Data Format/) }
+      it { expect { sut }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid Data Format/) }
     end
 
     context 'when is_list is false' do

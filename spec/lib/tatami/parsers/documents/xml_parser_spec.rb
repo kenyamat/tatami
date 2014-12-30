@@ -45,7 +45,7 @@ RSpec.describe Tatami::Parsers::Documents::XmlParser do
 
       context 'when node is not found' do
         let(:xpath) { '/root/body/a' }
-        it { expect { subject }.to raise_error(ArgumentError, /node not found./) }
+        it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /node not found./) }
       end
     end
 
@@ -59,7 +59,7 @@ RSpec.describe Tatami::Parsers::Documents::XmlParser do
       context 'when attribute is not found' do
         let(:xpath) { '/root/body/div' }
         let(:attr_name) { 'style' }
-        it { expect { subject }.to raise_error(ArgumentError, /attribute not found./) }
+        it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /attribute not found./) }
       end
     end
   end
@@ -100,7 +100,7 @@ RSpec.describe Tatami::Parsers::Documents::XmlParser do
       context 'when attributes are not found' do
         let(:xpath) { '/root/body/ul/li' }
         let(:attr_name) { 'style' }
-        it { expect { subject }.to raise_error(ArgumentError, /attribute not found/) }
+        it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /attribute not found/) }
       end
     end
   end
