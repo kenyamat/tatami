@@ -11,46 +11,25 @@ module Tatami
       end
 
       def get_document_parser
-        if @document_parser.nil?
-          case get_parser_type
-            when XML
-              @document_parser = Tatami::Parsers::Documents::XmlParser.new(@contents)
-            when HTML
-              @document_parser = Tatami::Parsers::Documents::HtmlParser.new(@contents)
-            when JAVASCRIPT
-              @document_parser = Tatami::Parsers::Documents::JsonParser.new(@contents)
-            else
-              @document_parser = Tatami::Parsers::Documents::TextParser.new(@contents)
-          end
-        end
+        @document_parser = case get_parser_type
+                           when XML then Tatami::Parsers::Documents::XmlParser.new(@contents)
+                           when HTML then Tatami::Parsers::Documents::HtmlParser.new(@contents)
+                           when JAVASCRIPT then @document_parser = Tatami::Parsers::Documents::JsonParser.new(@contents)
+                           else Tatami::Parsers::Documents::TextParser.new(@contents)
+                           end if @document_parser.nil?
         @document_parser
       end
 
       def exists_node?(xpath, attribute = nil)
-        begin
-          get_document_parser.exists_node?(xpath, attribute)
-        rescue => ex
-          raise ArgumentError, 'Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s, exception=%s, message=%s' %
-              [get_parser_type, xpath, attribute, ex.class, ex.message]
-        end
+        get_document_parser.exists_node?(xpath, attribute)
       end
 
       def get_document_value(xpath, attribute = nil)
-        begin
-          get_document_parser.get_document_value(xpath, attribute)
-        rescue => ex
-          raise ArgumentError, 'Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s, exception=%s, message=%s' %
-              [get_parser_type, xpath, attribute, ex.class, ex.message]
-        end
+        get_document_parser.get_document_value(xpath, attribute)
       end
 
       def get_document_values(xpath, attribute = nil)
-        begin
-          get_document_parser.get_document_values(xpath, attribute)
-        rescue => ex
-          raise ArgumentError, 'Failed to get value from document. ParserType=%s, xpath=%s, attribute=%s, exception=%s, message=%s' %
-              [get_parser_type, xpath, attribute, ex.class, ex.message]
-        end
+        get_document_parser.get_document_values(xpath, attribute)
       end
 
       def to_s
