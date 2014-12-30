@@ -1,6 +1,6 @@
 module Tatami
   module Constants
-    class ParserType
+    module ParserType
         XML = 1
         HTML = 2
         JAVASCRIPT = 3

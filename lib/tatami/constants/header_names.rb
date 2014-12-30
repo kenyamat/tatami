@@ -1,6 +1,6 @@
 module Tatami
   module Constants
-    class HeaderNames
+    module HeaderNames
       ROOT = 'Root'
       ARRANGE = 'Arrange'
       ASSERTION = 'Assertion'

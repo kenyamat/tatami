@@ -1,6 +1,7 @@
 module Tatami
   module Models
     class HttpResponse < ModelBase
+      include Tatami::Constants::ParserType
       attr_accessor :uri, :status_code, :content_type, :last_modified, :headers, :cookies, :contents, :exception
 
       def initialize(params = nil)
@@ -12,11 +13,11 @@ module Tatami
       def get_document_parser
         if @document_parser.nil?
           case get_parser_type
-            when Tatami::Constants::ParserType::XML
+            when XML
               @document_parser = Tatami::Parsers::Documents::XmlParser.new(@contents)
-            when Tatami::Constants::ParserType::HTML
+            when HTML
               @document_parser = Tatami::Parsers::Documents::HtmlParser.new(@contents)
-            when Tatami::Constants::ParserType::JAVASCRIPT
+            when JAVASCRIPT
               @document_parser = Tatami::Parsers::Documents::JsonParser.new(@contents)
             else
               @document_parser = Tatami::Parsers::Documents::TextParser.new(@contents)
@@ -59,10 +60,10 @@ module Tatami
       private
       def get_parser_type
         content_type = @content_type.downcase
-        return Tatami::Constants::ParserType::HTML if content_type.include?('html')
-        return Tatami::Constants::ParserType::XML if content_type.include?('xml')
-        return Tatami::Constants::ParserType::JAVASCRIPT if content_type.include?('javascript') or content_type.include?('json')
-        Tatami::Constants::ParserType::TEXT
+        return HTML if content_type.include?('html')
+        return XML if content_type.include?('xml')
+        return JAVASCRIPT if content_type.include?('javascript') or content_type.include?('json')
+        TEXT
       end
     end
   end

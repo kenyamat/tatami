@@ -3,8 +3,10 @@ module Tatami
     module Csv
       module Assertions
         class StatusCodeAssertionParser
+          include Tatami::Constants::HeaderNames
+
           def self.parse(header, row)
-            value = Tatami::Models::Csv::Header.get_string(header, Tatami::Constants::HeaderNames::STATUS_CODE, row)
+            value = Tatami::Models::Csv::Header.get_string(header, STATUS_CODE, row)
             return nil if value.nil?
             begin
               value = Integer(value, 10).to_s

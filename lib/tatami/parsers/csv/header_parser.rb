@@ -2,10 +2,12 @@ module Tatami
   module Parsers
     module Csv
       class HeaderParser
+        include Tatami::Constants::HeaderNames
+
         HEADER_ROW_COUNT = 4
         def self.parse(data)
           root = Tatami::Models::Csv::Header.new(
-              :name => Tatami::Constants::HeaderNames::ROOT,
+              :name => ROOT,
               :depth => -1,
               :from => 0,
               :to => data[0].length - 1)
