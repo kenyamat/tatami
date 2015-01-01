@@ -48,7 +48,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::DateTimeAssertionParser do
 
     context 'when name is nil' do
       let(:row) { [ nil, nil, 'true', 'true', nil, 'a', 'b' ] }
-      it { expect { sut }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid Data Format/) }
+      it { expect { sut }.to raise_error(Tatami::WrongFileFormatError, /Invalid Data Format/) }
     end
   end
 end

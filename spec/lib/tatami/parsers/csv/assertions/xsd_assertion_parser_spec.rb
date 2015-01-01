@@ -20,7 +20,7 @@ RSpec.describe Tatami::Parsers::Csv::Assertions::XsdAssertionParser do
 
     context 'when resource is nil' do
       let(:row) { [ nil, 'xxx' ] }
-      it { expect { sut }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid Data Format/) }
+      it { expect { sut }.to raise_error(Tatami::WrongFileFormatError, /Invalid Data Format/) }
     end
   end
 end

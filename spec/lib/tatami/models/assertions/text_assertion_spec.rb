@@ -29,7 +29,7 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
 
     context 'when not valid' do
       let(:value) { 'aaa' }
-      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Regex failed to match:/) }
+      it { expect { subject }.to raise_error(Tatami::WrongFileFormatError, /Regex failed to match:/) }
     end
   end
 
@@ -105,7 +105,7 @@ RSpec.describe Tatami::Models::Assertions::TextAssertion do
         let(:actual_value) { %w(a b) }
         it {
           allow(expected).to receive(:value) { 'vvvv' }
-          expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Static value test/)
+          expect { subject }.to raise_error(Tatami::WrongFileFormatError, /Static value test/)
         }
       end
 

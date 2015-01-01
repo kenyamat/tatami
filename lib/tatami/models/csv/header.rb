@@ -10,7 +10,7 @@ module Tatami
         end
 
         def self.get_parent(header, depth, index)
-          raise Tatami::Parsers::WrongFileFormatError, 'depth <= header.depth' if depth <= header.depth
+          raise Tatami::WrongFileFormatError, 'depth <= header.depth' if depth <= header.depth
           return header if depth == 0
 
           parent = header
@@ -25,7 +25,7 @@ module Tatami
             }
             break if h == parent
           end
-          raise Tatami::Parsers::WrongFileFormatError, 'Invalid header structure: name=%s' % [parent.name]
+          raise Tatami::WrongFileFormatError, 'Invalid header structure: name=%s' % [parent.name]
         end
 
         def self.get_header(header, index, depth = nil)
@@ -62,7 +62,7 @@ module Tatami
           value = get_string(header, header_name, row)
           return false if value.to_s.strip == '' or value.casecmp('false') == 0
           return true if value.casecmp('true') == 0
-          raise Tatami::Parsers::WrongFileFormatError, 'Invalid Data Format. <%s>\'s value should be boolean type. value=%s' % [header_name, value]
+          raise Tatami::WrongFileFormatError, 'Invalid Data Format. <%s>\'s value should be boolean type. value=%s' % [header_name, value]
         end
 
         def self.get_nullable_bool(header, header_name, row)
@@ -70,7 +70,7 @@ module Tatami
           return nil if value.to_s.strip == ''
           return false if value.casecmp('false') == 0
           return true if value.casecmp('true') == 0
-          raise Tatami::Parsers::WrongFileFormatError, 'Invalid Data Format. <%s>\'s value should be boolean type. value=%s' % [header_name, value]
+          raise Tatami::WrongFileFormatError, 'Invalid Data Format. <%s>\'s value should be boolean type. value=%s' % [header_name, value]
         end
 
         def self.get_string_list(header, header_name, row)

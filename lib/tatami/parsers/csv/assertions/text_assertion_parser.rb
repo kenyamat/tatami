@@ -16,7 +16,7 @@ module Tatami
 
           def self.validate(header, row)
             name = Tatami::Models::Csv::Header.get_string(header, NAME, row)
-            raise Tatami::Parsers::WrongFileFormatError, 'Invalid Data Format. Value of <Name> has no value.' if name.to_s.strip == ''
+            raise Tatami::WrongFileFormatError, 'Invalid Data Format. Value of <Name> has no value.' if name.to_s.strip == ''
           end
         end
       end

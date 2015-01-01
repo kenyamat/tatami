@@ -34,7 +34,7 @@ module Tatami
             return Date.strptime(value, format).strftime('%Y%m%d%H%M%S') unless is_time
             Time.strptime(value, format).strftime('%H%M%S')
           rescue => ex
-            raise Tatami::Parsers::WrongFileFormatError, ' Failed to parse DateTime. value=%s, format=%s, IsTime=%s, exception=%s, message=%s' %
+            raise Tatami::WrongFileFormatError, ' Failed to parse DateTime. value=%s, format=%s, IsTime=%s, exception=%s, message=%s' %
                 [ value, format, @is_time, ex.class, ex.message ]
           end
         end

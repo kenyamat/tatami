@@ -21,10 +21,10 @@ module Tatami
                   :name => 'Actual',
                   :http_request => Tatami::Parsers::Csv::HttpRequestParser.parse(http_request_header, data, ACTUAL))
               else
-                raise Tatami::Parsers::WrongFileFormatError, 'Invalid HttpRequest name. Expected is \'HttpRequest Expected\' or \'HttpRequest Actual\'. name=%s' % [http_request_header.name]
+                raise Tatami::WrongFileFormatError, 'Invalid HttpRequest name. Expected is \'HttpRequest Expected\' or \'HttpRequest Actual\'. name=%s' % [http_request_header.name]
             end
           }
-          raise Tatami::Parsers::WrongFileFormatError, 'HttpRequest Actual is empty.' if arranges.actual.nil?
+          raise Tatami::WrongFileFormatError, 'HttpRequest Actual is empty.' if arranges.actual.nil?
           arranges
         end
       end

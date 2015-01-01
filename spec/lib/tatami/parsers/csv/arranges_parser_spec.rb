@@ -58,7 +58,7 @@ RSpec.describe Tatami::Parsers::Csv::ArrangesParser do
       }
       let(:row) { [ nil, 'ExpectedSite', 'TargetSite' ] }
       subject { Tatami::Parsers::Csv::ArrangesParser.parse(header, row) }
-      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid HttpRequest name/) }
+      it { expect { subject }.to raise_error(Tatami::WrongFileFormatError, /Invalid HttpRequest name/) }
     end
 
     context 'when there is no actual' do
@@ -70,7 +70,7 @@ RSpec.describe Tatami::Parsers::Csv::ArrangesParser do
       }
       let(:row) { [ nil, 'ExpectedSite' ] }
       subject { Tatami::Parsers::Csv::ArrangesParser.parse(header, row) }
-      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /HttpRequest Actual is empty/) }
+      it { expect { subject }.to raise_error(Tatami::WrongFileFormatError, /HttpRequest Actual is empty/) }
     end
   end
 end

@@ -20,11 +20,11 @@ module Tatami
 
         def get_document_value(xpath, attribute = nil)
           html_node = @document.at_xpath(xpath)
-          raise Tatami::Parsers::WrongFileFormatError, 'node not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_node.nil?
+          raise Tatami::WrongFileFormatError, 'node not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_node.nil?
           if attribute.to_s.strip == ''
             html_node.text
           else
-            raise Tatami::Parsers::WrongFileFormatError, 'attribute not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_node.attribute(attribute).nil?
+            raise Tatami::WrongFileFormatError, 'attribute not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_node.attribute(attribute).nil?
             html_node.attribute(attribute).value
           end
         end
@@ -32,12 +32,12 @@ module Tatami
         def get_document_values(xpath, attribute = nil)
           list = []
           html_nodes = @document.xpath(xpath)
-          raise Tatami::Parsers::WrongFileFormatError, 'node not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_nodes.nil?
+          raise Tatami::WrongFileFormatError, 'node not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_nodes.nil?
           html_nodes.each do |html_node|
             if attribute.to_s.strip == ''
               value = html_node.text
             else
-              raise Tatami::Parsers::WrongFileFormatError, 'attribute not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_node.attribute(attribute).nil?
+              raise Tatami::WrongFileFormatError, 'attribute not found. xpath=%s, attribute=%s' % [xpath, attribute] if html_node.attribute(attribute).nil?
               value = html_node.attribute(attribute).value
             end
             list.push(value)

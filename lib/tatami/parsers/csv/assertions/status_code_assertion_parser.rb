@@ -11,7 +11,7 @@ module Tatami
             begin
               value = Integer(value, 10).to_s
             rescue => ex
-              raise Tatami::Parsers::WrongFileFormatError, 'Invalid Data Format. Value of <StatusCode> is not numeric. value=%s' % value
+              raise Tatami::WrongFileFormatError, 'Invalid Data Format. Value of <StatusCode> is not numeric. value=%s' % value
             end
             [ Tatami::Models::Assertions::StatusCodeAssertion.new(:value => value) ]
           end

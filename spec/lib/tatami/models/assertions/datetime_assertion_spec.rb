@@ -31,7 +31,7 @@ RSpec.describe Tatami::Models::Assertions::DateTimeAssertion do
         context 'when invalid format' do
           let(:expected_value) { '20141220' }
           let(:actual_value) { '20141221' }
-          it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Failed to parse DateTime/) }
+          it { expect { subject }.to raise_error(Tatami::WrongFileFormatError, /Failed to parse DateTime/) }
         end
       end
 

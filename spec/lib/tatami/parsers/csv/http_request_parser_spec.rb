@@ -121,7 +121,7 @@ RSpec.describe Tatami::Parsers::Csv::HttpRequestParser do
       }
       let(:row) { [ nil, 'Mozilla/5.0' ] }
       subject { Tatami::Parsers::Csv::HttpRequestParser.parse(header, row, 'Actual') }
-      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<BaseUri> should be not null/) }
+      it { expect { subject }.to raise_error(Tatami::WrongFileFormatError, /<BaseUri> should be not null/) }
     end
   end
 end
