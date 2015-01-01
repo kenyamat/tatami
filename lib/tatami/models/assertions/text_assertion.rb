@@ -17,7 +17,7 @@ module Tatami
         def match(value, pattern)
           Regexp.new(pattern) =~ value
           return Regexp.last_match[1] unless Regexp.last_match.nil?
-          raise ArgumentError, 'Regex failed to match: value:%s, pattern:%s' % [ value, pattern ]
+          raise Tatami::Parsers::WrongFileFormatError, 'Regex failed to match: value:%s, pattern:%s' % [ value, pattern ]
         end
 
         def assert(expected, actual)
@@ -47,7 +47,7 @@ module Tatami
         end
 
         def get_values(arrange, assertion_item)
-          raise ArgumentError, 'Static value test for list is not supported.' unless assertion_item.value.nil?
+          raise Tatami::Parsers::WrongFileFormatError, 'Static value test for list is not supported.' unless assertion_item.value.nil?
           values = arrange.http_response.get_document_values(assertion_item.query, assertion_item.attribute)
           unless assertion_item.pattern.nil?
             list = []

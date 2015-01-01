@@ -20,7 +20,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
 
     context 'when invalid name' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'XX') }
-      it { expect { subject }.to raise_error(ArgumentError, /Invalid Header Name/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid Header Name/) }
     end
 
     context 'when invalid number of children' do
@@ -29,7 +29,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
           Tatami::Models::Csv::Header.new({}),
           Tatami::Models::Csv::Header.new({})
       ]) }
-      it { expect { subject }.to raise_error(ArgumentError, /children is invalid/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /children is invalid/) }
     end
   end
 
@@ -58,7 +58,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             ])
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Arrange should have <HttpRequest Actual>/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Arrange should have <HttpRequest Actual>/) }
     end
 
     context 'when there is invalid node' do
@@ -72,12 +72,12 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             ])
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<Arrange> has unknown child./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Arrange> has unknown child./) }
     end
 
     context 'when there is no children' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'Arrange', :depth => 0, :from => 0, :to => 0, :children => []) }
-      it { expect { subject }.to raise_error(ArgumentError, /Arrange's children are not found/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Arrange's children are not found/) }
     end
   end
 
@@ -112,12 +112,12 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             Tatami::Models::Csv::Header.new(:name => 'BaseUri', :depth => 2, :from => 1, :to => 1),
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Invalid Header Name/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid Header Name/) }
     end
 
     context 'when there is no BaseUri' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'HttpRequest Actual', :depth => 1, :from => 1, :to => 7, :children => []) }
-      it { expect { subject }.to raise_error(ArgumentError, /Actual should have <BaseUri> as his child/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Actual should have <BaseUri> as his child/) }
     end
 
     context 'when there is invalid child' do
@@ -127,7 +127,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             Tatami::Models::Csv::Header.new(:name => 'XX', :depth => 2, :from => 2, :to => 2),
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Invalid Header Format./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid Header Format./) }
     end
 
     context 'when BaseUri has child' do
@@ -138,7 +138,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             ])
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<BaseUri> should have no children/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<BaseUri> should have no children/) }
     end
 
     context 'when Headers has no child' do
@@ -148,7 +148,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             Tatami::Models::Csv::Header.new(:name => 'Headers', :depth => 2, :from => 2, :to => 2)
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Headers should have children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Headers should have children./) }
     end
 
     context 'when Fragment has child' do
@@ -160,7 +160,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             ]),
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<Fragment> should have no children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Fragment> should have no children./) }
     end
   end
 
@@ -199,14 +199,14 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             Tatami::Models::Csv::Header.new(:name => 'Uri', :depth => 1, :from => 1, :to => 1)
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Invalid Header Name. Expected=Assertion/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Invalid Header Name. Expected=Assertion/) }
     end
 
     context 'when there is no children' do
       let(:header) {
         Tatami::Models::Csv::Header.new(:name => 'Assertion', :depth => 0, :from => 1, :to => 1)
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Assertion should have children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Assertion should have children./) }
     end
 
     context 'when Uri has child' do
@@ -217,7 +217,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             ])
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<Uri> should have no children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Uri> should have no children./) }
     end
 
     context 'when Headers has no child' do
@@ -226,7 +226,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             Tatami::Models::Csv::Header.new(:name => 'Headers', :depth => 1, :from => 1, :to => 1)
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Headers should have children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Headers should have children./) }
     end
 
     context 'when there is invalid child' do
@@ -235,7 +235,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             Tatami::Models::Csv::Header.new(:name => 'XX', :depth => 1, :from => 1, :to => 1)
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<Assertion> has a unknown child. Name=XX/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Assertion> has a unknown child. Name=XX/) }
     end
   end
 
@@ -269,7 +269,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             ]),
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Contents should have <Actual> as his child./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Contents should have <Actual> as his child./) }
     end
 
     context 'when Name has child' do
@@ -287,7 +287,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             Tatami::Models::Csv::Header.new(:name => 'XX', :depth => 2, :from => 4, :to => 4),
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<Name> should have no children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Name> should have no children./) }
     end
 
     context 'when there is invalid child' do
@@ -303,7 +303,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             ]),
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<Contents> has a unknown child./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Contents> has a unknown child./) }
     end
   end
 
@@ -332,7 +332,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
             Tatami::Models::Csv::Header.new(:name => 'XX', :depth => 2, :from => 2, :to => 2),
         ])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /<Expected> has a unknown child. Name=XX/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Expected> has a unknown child. Name=XX/) }
     end
 
     context 'when there is no child' do
@@ -340,7 +340,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
 
         Tatami::Models::Csv::Header.new(:name => 'Expected', :depth => 1, :from => 1, :to => 7, :children => [])
       }
-      it { expect { subject }.to raise_error(ArgumentError, /Expected should have children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Expected should have children./) }
     end
 
   end
@@ -357,7 +357,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
     context 'when not valid' do
       let(:header) { nil }
       let(:name) { 'Contents' }
-      it { expect { subject }.to raise_error(ArgumentError, /Header <Contents> is not found./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Header <Contents> is not found./) }
     end
   end
 
@@ -375,28 +375,28 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
 
     context 'when invalid from/to' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'Parent', :depth => -1, :from => 1, :to => 0) }
-      it { expect { subject }.to raise_error(ArgumentError, /<Parent>'s From\/To is invalid./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Parent>'s From\/To is invalid./) }
     end
 
     context 'when invalid depth' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'Parent', :depth => -1, :from => 0, :to => 1, :children => [
           Tatami::Models::Csv::Header.new(:name => 'Child', :depth => -1, :from => 0, :to => 0)
       ]) }
-      it { expect { subject }.to raise_error(ArgumentError, /<Child>'s Depth is invalid. Expected=0, Actual=-1/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Child>'s Depth is invalid. Expected=0, Actual=-1/) }
     end
 
     context 'when invalid from' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'Parent', :depth => -1, :from => 1, :to => 2, :children => [
           Tatami::Models::Csv::Header.new(:name => 'Child', :depth => 0, :from => 0, :to => 1)
       ]) }
-      it { expect { subject }.to raise_error(ArgumentError, /<Child>'s From is invalid. <Child>'s From=0, Child's parent's From=1/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Child>'s From is invalid. <Child>'s From=0, Child's parent's From=1/) }
     end
 
     context 'when invalid to' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'Parent', :depth => -1, :from => 0, :to => 0, :children => [
           Tatami::Models::Csv::Header.new(:name => 'Child', :depth => 0, :from => 0, :to => 1)
       ]) }
-      it { expect { subject }.to raise_error(ArgumentError, /<Child>'s To is invalid. <Child>'s To=1, Child's parent's To=0/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Child>'s To is invalid. <Child>'s To=1, Child's parent's To=0/) }
     end
   end
 
@@ -414,7 +414,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
 
     context 'when children is empty' do
       let(:header) { Tatami::Models::Csv::Header.new(:name => 'Parent', :depth => -1, :from => 0, :to => 4, :children => []) }
-      it { expect { subject }.to raise_error(ArgumentError, /Parent's children are not found/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Parent's children are not found/) }
     end
 
     context 'when invalid count' do
@@ -423,7 +423,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
           Tatami::Models::Csv::Header.new(:name => 'Child1', :depth => 0, :from => 0, :to => 2),
           Tatami::Models::Csv::Header.new(:name => 'Child2', :depth => 0, :from => 2, :to => 4),
       ]) }
-      it { expect { subject }.to raise_error(ArgumentError, /Count of <Parent>'s children is invalid. Expected=3, Actual=2/) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /Count of <Parent>'s children is invalid. Expected=3, Actual=2/) }
     end
   end
 
@@ -440,7 +440,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
           Tatami::Models::Csv::Header.new(:name => 'Child1', :depth => 0, :from => 0, :to => 2),
           Tatami::Models::Csv::Header.new(:name => 'Child2', :depth => 0, :from => 2, :to => 4),
       ]) }
-      it { expect { subject }.to raise_error(ArgumentError, /<Parent> should have no children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Parent> should have no children./) }
     end
   end
 
@@ -462,7 +462,7 @@ RSpec.describe Tatami::Validators::Csv::HeaderValidator do
           ]),
           Tatami::Models::Csv::Header.new(:name => 'Child2', :depth => 0, :from => 2, :to => 4),
       ]) }
-      it { expect { subject }.to raise_error(ArgumentError, /<Parent> should have no grand children./) }
+      it { expect { subject }.to raise_error(Tatami::Parsers::WrongFileFormatError, /<Parent> should have no grand children./) }
     end
   end
 end

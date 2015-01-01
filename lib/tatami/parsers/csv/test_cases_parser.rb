@@ -4,7 +4,6 @@ module Tatami
       class TestCasesParser
         def self.parse(data, resources = nil)
           raise ArgumentError, 'data should not be null.' if data.nil? or data.empty? or data[0].empty?
-
           header = Tatami::Parsers::Csv::HeaderParser.parse(data)
           Tatami::Validators::Csv::HeaderValidator.validate(header)
           cases = Tatami::Models::TestCases.new

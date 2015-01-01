@@ -29,7 +29,7 @@ module Tatami
                 name == Tatami::Constants::HeaderNames::HTTP_REQUEST_EXPECTED
               validate_http_request(child);
             else
-              raise ArgumentError, 'Invalid Header Format. <%s> has unknown child. Name=%s' % [ header.name, name ]
+              raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. <%s> has unknown child. Name=%s' % [ header.name, name ]
             end
           }
           true
@@ -56,7 +56,7 @@ module Tatami
               validate_having_children(child)
               validate_not_having_grand_children(child)
             else
-              raise ArgumentError, 'Invalid Header Format. <%s> a has unknown child. Name=%s' % [ header.name, name ]
+              raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. <%s> a has unknown child. Name=%s' % [ header.name, name ]
             end
           }
           true
@@ -69,8 +69,7 @@ module Tatami
 
           header.children.each { |child|
             name = child.name
-            if [
-                Tatami::Constants::HeaderNames::URI,
+            if [Tatami::Constants::HeaderNames::URI,
                 Tatami::Constants::HeaderNames::STATUS_CODE,
                 Tatami::Constants::HeaderNames::XSD ].include?(name)
               validate_not_having_children(child)
@@ -83,7 +82,7 @@ module Tatami
                 Tatami::Constants::HeaderNames::CONTENTS ].include?(name)
               validate_contents(child)
             else
-              raise ArgumentError, 'Invalid Header Format. <%s> has a unknown child. Name=%s' % [ header.name, name ]
+              raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. <%s> has a unknown child. Name=%s' % [ header.name, name ]
             end
           }
           true
@@ -109,7 +108,7 @@ module Tatami
                 Tatami::Constants::HeaderNames::ACTUAL ].include?(name)
               validate_contents_item(child)
             else
-              raise ArgumentError, 'Invalid Header Format. <%s> has a unknown child. Name=%s' % [ header.name, name]
+              raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. <%s> has a unknown child. Name=%s' % [ header.name, name]
             end
           }
           true
@@ -131,23 +130,23 @@ module Tatami
                 Tatami::Constants::HeaderNames::URL_DECODE ].include?(name)
               validate_not_having_children(child)
             else
-              raise ArgumentError, 'Invalid Header Format. <%s> has a unknown child. Name=%s' % [ header.name, name ]
+              raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. <%s> has a unknown child. Name=%s' % [ header.name, name ]
             end
           }
           true
         end
 
         def self.validate_not_nil(header, name)
-          raise ArgumentError, 'Invalid Header Format. Header <%s> is not found.' % [name] if header.nil?
+          raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. Header <%s> is not found.' % [name] if header.nil?
           true
         end
 
         def self.validate_depth_from_to(header, depth)
-          raise ArgumentError, "Invalid Header Format. <%s>'s From/To is invalid." % [ header.name ] if header.from > header.to
-          raise ArgumentError, "Invalid Header Format. <%s>'s Depth is invalid. Expected=%s, Actual=%s" % [ header.name, depth, header.depth ] if header.depth != depth
+          raise Tatami::Parsers::WrongFileFormatError, "Invalid Header Format. <%s>'s From/To is invalid." % [ header.name ] if header.from > header.to
+          raise Tatami::Parsers::WrongFileFormatError, "Invalid Header Format. <%s>'s Depth is invalid. Expected=%s, Actual=%s" % [ header.name, depth, header.depth ] if header.depth != depth
           header.children.each { |child|
-            raise ArgumentError, "Invalid Header Format. <%s>'s From is invalid. <%s>'s From=%s, %s's parent's From=%s" % [ child.name, child.name, child.from, child.name, header.from ] if header.from > child.from
-            raise ArgumentError, "Invalid Header Format. <%s>'s To is invalid. <%s>'s To=%s, %s's parent's To=%s" % [ child.name, child.name, child.to, child.name, header.to ] if header.to < child.to
+            raise Tatami::Parsers::WrongFileFormatError, "Invalid Header Format. <%s>'s From is invalid. <%s>'s From=%s, %s's parent's From=%s" % [ child.name, child.name, child.from, child.name, header.from ] if header.from > child.from
+            raise Tatami::Parsers::WrongFileFormatError, "Invalid Header Format. <%s>'s To is invalid. <%s>'s To=%s, %s's parent's To=%s" % [ child.name, child.name, child.to, child.name, header.to ] if header.to < child.to
             validate_depth_from_to(child, depth + 1)
           }
           true
@@ -156,13 +155,13 @@ module Tatami
         def self.validate_name(header, expected, expected2 = nil)
           if expected2.nil?
             if header.name != expected
-              raise ArgumentError, 'Invalid Header Format. Invalid Header Name. Expected=%s, Actual=%s' % [ expected, header.name ]
+              raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. Invalid Header Name. Expected=%s, Actual=%s' % [ expected, header.name ]
             else
               return true
             end
           end
           if header.name != expected and header.name != expected2
-            raise ArgumentError, 'Invalid Header Format. Invalid Header Name. Expected=%s, Actual=%s' % [ expected, header.name ]
+            raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. Invalid Header Name. Expected=%s, Actual=%s' % [ expected, header.name ]
           end
           true
         end
@@ -175,24 +174,24 @@ module Tatami
               break
             end
           }
-          raise ArgumentError, 'Invalid Header Format. %s should have <%s> as his child.' % [ header.name, child_name ] if !test
+          raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. %s should have <%s> as his child.' % [ header.name, child_name ] if !test
           true
         end
 
         def self.validate_having_children(header, count = nil)
-          raise ArgumentError, "Invalid Header Format. %s's children are not found. %s should have children." % [ header.name, header.name ] if header.children.nil? or header.children.empty?
-          raise ArgumentError, "Invalid Header Format. Count of <%s>'s children is invalid. Expected=%s, Actual=%s" % [ header.name, count, header.children.count ] if !count.nil? and header.children.count != count
+          raise Tatami::Parsers::WrongFileFormatError, "Invalid Header Format. %s's children are not found. %s should have children." % [ header.name, header.name ] if header.children.nil? or header.children.empty?
+          raise Tatami::Parsers::WrongFileFormatError, "Invalid Header Format. Count of <%s>'s children is invalid. Expected=%s, Actual=%s" % [ header.name, count, header.children.count ] if !count.nil? and header.children.count != count
           true
         end
 
         def self.validate_not_having_children(header, count = nil)
-          raise ArgumentError, "Invalid Header Format. <%s>'s children are found. <%s> should have no children." % [ header.name, header.name ] if !header.children.nil? and header.children.any?
+          raise Tatami::Parsers::WrongFileFormatError, "Invalid Header Format. <%s>'s children are found. <%s> should have no children." % [ header.name, header.name ] if !header.children.nil? and header.children.any?
           true
         end
 
         def self.validate_not_having_grand_children(header)
           header.children.each { |child|
-            raise ArgumentError, 'Invalid Header Format. <%s> should have no grand children.' % [ header.name ] if child.children.any?
+            raise Tatami::Parsers::WrongFileFormatError, 'Invalid Header Format. <%s> should have no grand children.' % [ header.name ] if child.children.any?
           }
           true
         end

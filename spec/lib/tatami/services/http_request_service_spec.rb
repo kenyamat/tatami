@@ -64,7 +64,7 @@ RSpec.describe Tatami::Services::HttpRequestService do
       end
 
       context 'when query_strings is empty' do
-        let(:query_strings) { Hash.new }
+        let(:query_strings) { {} }
         it { is_expected.to eq URI('http://a.com') }
       end
     end
